@@ -1,8 +1,8 @@
 ## Interface: 80200
 
-## Title: AdiBags Configuration
+## Title: |cfffe7b2cElvUI|r |cfff960d9KlixUI|r AdiBags Configuration
 ## Notes: Adirelle's bag addon.
-## Author: Adirelle
+## Author: Adirelle (Modified by Klix)
 ## Version: v1.9.17
 ## X-Date: 2019-07-09T18:22:10Z
 ## X-Part-Of: AdiBags
