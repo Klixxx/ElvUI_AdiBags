@@ -1,0 +1,12 @@
+tag 0c0ca7755596ec9b4f6d39ed0e15a65129604c93 v1.9.17
+Author:	Talyrius <contact@talyrius.net>
+Date:	Tue Jul 9 11:24:31 2019 -0700
+
+Tagging as v1.9.17.
+
+commit b2f75413d47b21a53ea6fa2e0995760a1b0803af
+Author: Talyrius <contact@talyrius.net>
+Date:   Tue Jul 9 11:22:10 2019 -0700
+
+    ItemLevel: Updated item level ranges for Season 3.
+
