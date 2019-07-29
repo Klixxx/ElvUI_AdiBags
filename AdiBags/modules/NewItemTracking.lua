@@ -300,7 +300,7 @@ function mod:ShowPixelGlow(button, enable)
 			button.NewItemTexture:SetAtlas("bags-glow-white")
 		end
 		button.NewItemTexture:Show()
-		LCG.PixelGlow_Start(button, {0.95, 0.95, 0.32, 1}, nil, -0.30, nil, 1)
+		LCG.PixelGlow_Start(button, {0.95, 0.95, 0.32, 1}, nil, -0.30, nil, 2)
 	else
 		button.NewItemTexture:Hide()
 		LCG.PixelGlow_Stop(button)
