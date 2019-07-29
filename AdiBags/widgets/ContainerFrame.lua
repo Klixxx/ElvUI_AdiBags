@@ -172,6 +172,7 @@ function containerProto:OnCreate(name, isBank, bagObject)
 	closeButton:SetPoint("TOPRIGHT", -2, -2)
 	addon.SetupTooltip(closeButton, L["Close"])
 	closeButton:SetFrameLevel(frameLevel)
+	ElvUI[1]:GetModule("Skins"):HandleCloseButton(self.CloseButton) -- ElvUI Mod!
 
 	local bagSlotButton = CreateFrame("CheckButton", nil, self)
 	bagSlotButton:SetNormalTexture([[Interface\Buttons\Button-Backpack-Up]])
@@ -193,6 +194,7 @@ function containerProto:OnCreate(name, isBank, bagObject)
 	searchBox:SetFrameLevel(frameLevel)
 	headerRightRegion:AddWidget(searchBox, -10, 130, 0, -1)
 	tinsert(_G.ITEM_SEARCHBAR_LIST, searchBox:GetName())
+	ElvUI[1]:GetModule("Skins"):HandleEditBox(searchBox) -- ElvUI Mod!
 
 	local title = self:CreateFontString(self:GetName().."Title","OVERLAY")
 	self.Title = title
@@ -270,6 +272,7 @@ function containerProto:CreateModuleButton(letter, order, onClick, tooltip)
 	button:SetSize(20, 20)
 	button:SetScript("OnClick", onClick)
 	button:RegisterForClicks("AnyUp")
+	ElvUI[1]:GetModule("Skins"):HandleButton(button) -- ElvUI Mod!
 	if order then
 		self:AddHeaderWidget(button, order)
 	end
@@ -312,7 +315,8 @@ end
 end
 
 function containerProto:CreateDepositButton()
-	local button = self:CreateModuleAutoButton(
+	local button 
+	button = self:CreateModuleAutoButton(
 		"D",
 		0,
 		REAGENTBANK_DEPOSIT,
@@ -330,7 +334,8 @@ function containerProto:CreateDepositButton()
 end
 
 function containerProto:CreateSortButton()
-	self:CreateModuleButton(
+	local button
+	button = self:CreateModuleButton(
 		"S",
 		10,
 		function()
@@ -370,6 +375,7 @@ function containerProto:CreateReagentTabButton()
 			)
 		end
 	)
+	ElvUI[1]:GetModule("Skins"):HandleButton(button) -- ElvUI Mod!
 end
 
 --------------------------------------------------------------------------------

@@ -19,15 +19,15 @@
 
 ## Interface: 80200
 
-## Title: |cfffe7b2cElvUI|r |cfff960d9KlixUI|r AdiBags
+## Title: |cfffe7b2cElvUI|r AdiBags
 ## Notes: Adirelle's bag addon.
 ## Author: Adirelle (Modified by Klix)
 ## Version: v1.9.17
 ## SavedVariables: AdiBagsDB
 ## X-Date: 2019-07-09T18:22:10Z
 ## X-License: GPL v3
-## RequiredDeps: ElvUI_KlixUI
-## OptionalDeps: LibStub, CallbackHandler-1.0, Ace3, LibSharedMedia-3.0, Scrap, BrainDead, !BugGrabber, SyLevel
+## RequiredDeps: ElvUI
+## OptionalDeps: ElvUI_KlixUI, LibStub, CallbackHandler-1.0, Ace3, LibSharedMedia-3.0, Scrap, BrainDead, !BugGrabber, SyLevel
 #@alpha@
 # ## OptionalDeps: AdiDebug, BugSack, Swatter
 #@end-alpha@
@@ -78,6 +78,8 @@ modules\BankSwitcher.lua
 modules\ChangeHighlight.lua
 
 core\DefaultFilters.lua
+
+ElvUISkin.lua
 
 #@debug@
 # ## Version: DEV
