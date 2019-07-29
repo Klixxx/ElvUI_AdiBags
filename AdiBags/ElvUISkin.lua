@@ -30,7 +30,7 @@ local function StyleAdiBags(event)
 				bPanel:Styling()
 			end
 			for _, v in pairs(bPanel.buttons) do
-				v:SetTemplate("Transparent")
+				AS:SkinIconButton(v)
 			end
 			return bPanel
 		end,
