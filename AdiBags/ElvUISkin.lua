@@ -20,6 +20,9 @@ local function StyleAdiBags(event)
 		if IsAddOnLoaded("ElvUI_KlixUI") or IsAddOnLoaded("ElvUI_MerathilisUI") then
 			frame:Styling()
 		end
+		if IsAddOnLoaded("ElvUI_BenikUI") then
+			frame:Style("Inside")
+		end
 		S:HandleIcon(frame.BagSlotButton:GetNormalTexture())
 	end)
 
