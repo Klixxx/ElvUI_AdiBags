@@ -4,7 +4,7 @@ local L = addon.L
 local E, _, V, P, G = unpack(ElvUI)
 local S = E:GetModule("Skins")
 
-local function StyleAdiBags(event)
+function addon:MakeAdiBagsPretty(event)
 
 	if not AddOnSkins then
 		E:Print("Please enable AddOnSkins to get the full ElvUI look of AdiBags!!")
@@ -53,5 +53,3 @@ local function StyleAdiBags(event)
 	end)
 	
 end
-
-S:AddCallbackForAddon("AdiBags", "ElvUIAdiBags", StyleAdiBags)

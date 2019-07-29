@@ -96,6 +96,7 @@ function addon:OnInitialize()
 
 	self:InitializeFilters()
 	self:CreateBagAnchor()
+	self:MakeAdiBagsPretty() -- ElvUI Mod!
 
 	self:SetEnabledState(false)
 
@@ -108,7 +109,7 @@ function addon:OnInitialize()
 	self:RegisterChatCommand("adibags", function(cmd)
 		addon:OpenOptions(strsplit(' ', cmd or ""))
 	end, true)
-
+	
 	self:Debug('Initialized')
 end
 
