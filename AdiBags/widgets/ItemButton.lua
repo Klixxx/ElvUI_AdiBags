@@ -316,6 +316,18 @@ function buttonProto:Update()
 	if self.UpdateSearch then
 		self:UpdateSearch()
 	end
+	
+	-- ElvUI Mod!
+	AddOnSkins[1]:SkinIconButton(self) -- ElvUI Mod!
+	if IsAddOnLoaded("ElvUI_KlixUI") then
+		ElvUI_KlixUI[1]:GetModule("KuiButtonStyle"):StyleButton(self)
+	end
+	if self.IconQuestTexture:GetBlendMode() == "ADD" then
+		self:SetBackdropBorderColor(self.IconQuestTexture:GetVertexColor())
+		self.IconQuestTexture:Hide()
+	else
+		self.IconQuestTexture:Show()
+	end
 	addon:SendMessage('AdiBags_UpdateButton', self)
 end
 
