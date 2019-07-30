@@ -590,6 +590,18 @@ function containerProto:UpdateSkin()
 	else
 		self:SetBackdropBorderColor(0.5+(0.5*r/m), 0.5+(0.5*g/m), 0.5+(0.5*b/m), a)
 	end
+	
+	-- ElvUI Mod!
+	if IsAddOnLoaded("ElvUI") then
+		self:StripTextures()
+		self:SetTemplate("Transparent")
+		if IsAddOnLoaded("ElvUI_KlixUI") or IsAddOnLoaded("ElvUI_MerathilisUI") then
+			self:Styling()
+		end
+		if IsAddOnLoaded("ElvUI_BenikUI") then
+			self:Style("Inside")
+		end
+	end
 end
 
 --------------------------------------------------------------------------------

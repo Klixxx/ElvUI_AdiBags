@@ -15,14 +15,6 @@ function addon:MakeAdiBagsPretty(event)
 	
 	addon:HookBagFrameCreation(addon, function(bag)
 		local frame = bag:GetFrame()
-		frame:StripTextures()
-		frame:SetTemplate("Transparent")
-		if IsAddOnLoaded("ElvUI_KlixUI") or IsAddOnLoaded("ElvUI_MerathilisUI") then
-			frame:Styling()
-		end
-		if IsAddOnLoaded("ElvUI_BenikUI") then
-			frame:Style("Inside")
-		end
 		S:HandleIcon(frame.BagSlotButton:GetNormalTexture())
 	end)
 
