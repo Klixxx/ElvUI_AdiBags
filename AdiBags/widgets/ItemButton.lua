@@ -416,8 +416,8 @@ function buttonProto:UpdateBorder(isolatedEvent)
 			border:SetTexture(texture)
 			border:SetVertexColor(r or 1, g or 1, b or 1, a or 1)
 		end
-		border:SetTexCoord(x1 or 0, x2 or 1, y1 or 0, y2 or 1)
-		border:SetBlendMode(blendMode or "BLEND")
+		--border:SetTexCoord(x1 or 0, x2 or 1, y1 or 0, y2 or 1)
+		border:SetBlendMode(blendMode or "ADD")
 		border:Show()
 	end
 	if self.JunkIcon then
