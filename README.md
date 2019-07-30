@@ -1,7 +1,7 @@
 # AdiBags
 This is a modified version of AdiBags, which will skin it, so it looks like ElvUI again!
 
-This skin is nearly perfect, there are still some small issues i need to adress.
+This skin is nearly perfect, there are still some small issues i need to address.
 
 Here is a list of known issues:
 1. Hovering over items in your bag/bank will hide the border color, reopen bags and will display the borders again.
