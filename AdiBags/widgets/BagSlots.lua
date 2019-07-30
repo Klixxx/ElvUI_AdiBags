@@ -422,6 +422,18 @@ local function Panel_UpdateSkin(self)
 	else
 		self:SetBackdropBorderColor(0.5+(0.5*r/m), 0.5+(0.5*g/m), 0.5+(0.5*b/m), a)
 	end
+	
+	-- ElvUI Mod!
+	if IsAddOnLoaded("ElvUI") then
+		self:StripTextures()
+		self:SetTemplate("Transparent")
+		if IsAddOnLoaded("ElvUI_KlixUI") or IsAddOnLoaded("ElvUI_MerathilisUI") then
+			self:Styling()
+		end
+		if IsAddOnLoaded("ElvUI_BenikUI") then
+			self:Style("Inside")
+		end
+	end
 end
 
 local function Panel_ConfigChanged(self, event, name)
@@ -461,6 +473,10 @@ function addon:CreateBagSlotPanel(container, name, bags, isBank)
 			button:SetParent(self)
 			button:SetPoint("TOPLEFT", x, -TOP_PADDING)
 			button:Show()
+			AddOnSkins[1]:SkinIconButton(button) -- ElvUI Mod!
+			if IsAddOnLoaded("ElvUI_KlixUI") then
+				ElvUI_KlixUI[1]:GetModule("KuiButtonStyle"):StyleButton(button)
+			end
 			x = x + ITEM_SIZE + ITEM_SPACING
 			tinsert(self.buttons, button)
 		end

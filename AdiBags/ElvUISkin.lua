@@ -12,19 +12,6 @@ function addon:MakeAdiBagsPretty(event)
 	end
 	
 	local AS = unpack(AddOnSkins)
-	
-	addon:RawHook(addon, "CreateBagSlotPanel", function(this, ...)
-		local bPanel = addon.hooks[this].CreateBagSlotPanel(this, ...)
-			bPanel:SetTemplate("Transparent")
-			if IsAddOnLoaded("ElvUI_KlixUI") or IsAddOnLoaded("ElvUI_MerathilisUI") then
-				bPanel:Styling()
-			end
-			for _, v in pairs(bPanel.buttons) do
-				AS:SkinIconButton(v)
-			end
-			return bPanel
-		end,
-	true)
 
 	addon:RegisterMessage("AdiBags_UpdateButton", function(event, btn)
 		AS:SkinIconButton(btn)
