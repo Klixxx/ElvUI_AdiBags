@@ -18,6 +18,12 @@ function addon:MakeAdiBagsPretty(event)
 		if IsAddOnLoaded("ElvUI_KlixUI") then
 			ElvUI_KlixUI[1]:GetModule("KuiButtonStyle"):StyleButton(btn)
 		end
+		if btn.IconQuestTexture:GetBlendMode() == "ADD" then
+			btn:SetBackdropBorderColor(btn.IconQuestTexture:GetVertexColor())
+			btn.IconQuestTexture:Hide()
+		else
+			btn.IconQuestTexture:Show()
+		end
 	end)
 	
 end

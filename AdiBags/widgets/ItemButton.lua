@@ -394,10 +394,7 @@ function buttonProto:UpdateBorder(isolatedEvent)
 		texture, r, g, b, a, x1, x2, y1, y2, blendMode = GetBorder(self.bag, self.slot, self.itemLink or self.itemId, addon.db.profile)
 	end
 	if not texture then
-		if self.IconQuestTexture:GetBlendMode() == "ADD" then -- ElvUI Mod!
-			self:SetBackdropBorderColor(self.IconQuestTexture:GetVertexColor()) -- ElvUI Mod!
-			self.IconQuestTexture:Hide()
-		end
+		self.IconQuestTexture:Hide()
 	else
 		local border = self.IconQuestTexture
 		if texture == true then
