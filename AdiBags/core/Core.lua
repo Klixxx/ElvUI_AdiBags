@@ -96,7 +96,6 @@ function addon:OnInitialize()
 
 	self:InitializeFilters()
 	self:CreateBagAnchor()
-	self:MakeAdiBagsPretty() -- ElvUI Mod!
 
 	self:SetEnabledState(false)
 
