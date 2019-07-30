@@ -9,4 +9,5 @@ Here is a list of known issues:
 3. Sometimes after a loading screen has ended e.g. taking a portal, entering a dungeon etc. the bag can display default AdiBags quality borders, please do a /rl and it should be fixed.
 
 Yours sincerely
+
 Klix
