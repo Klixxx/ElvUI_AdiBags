@@ -13,11 +13,6 @@ function addon:MakeAdiBagsPretty(event)
 	
 	local AS = unpack(AddOnSkins)
 	
-	addon:HookBagFrameCreation(addon, function(bag)
-		local frame = bag:GetFrame()
-		S:HandleIcon(frame.BagSlotButton:GetNormalTexture())
-	end)
-
 	addon:RawHook(addon, "CreateBagSlotPanel", function(this, ...)
 		local bPanel = addon.hooks[this].CreateBagSlotPanel(this, ...)
 			bPanel:SetTemplate("Transparent")

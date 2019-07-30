@@ -178,6 +178,7 @@ function containerProto:OnCreate(name, isBank, bagObject)
 	bagSlotButton:SetNormalTexture([[Interface\Buttons\Button-Backpack-Up]])
 	bagSlotButton:SetCheckedTexture([[Interface\Buttons\CheckButtonHilight]])
 	bagSlotButton:GetCheckedTexture():SetBlendMode("ADD")
+	bagSlotButton:GetCheckedTexture():SetTexCoord(unpack(ElvUI[1].TexCoords)) -- ElvUI Mod!
 	bagSlotButton:SetScript('OnClick', BagSlotButton_OnClick)
 	bagSlotButton.panel = bagSlotPanel
 	bagSlotButton:SetWidth(18)
@@ -188,6 +189,7 @@ function containerProto:OnCreate(name, isBank, bagObject)
 		L["Click to toggle the equipped bag panel, so you can change them."]
 	}, "ANCHOR_BOTTOMLEFT", -8, 0)
 	headerLeftRegion:AddWidget(bagSlotButton, 50)
+	ElvUI[1]:GetModule("Skins"):HandleIcon(bagSlotButton:GetNormalTexture()) -- ElvUI Mod!
 
 	local searchBox = CreateFrame("EditBox", self:GetName().."SearchBox", self, "BagSearchBoxTemplate")
 	searchBox:SetSize(130, 20)
