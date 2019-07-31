@@ -1,4 +1,4 @@
-# AdiBags
+# ElvUI AdiBags
 This is a modified version of AdiBags, which will skin it, so it looks like ElvUI again!
 
 This skin is nearly perfect, there are still some small issues i need to address.
