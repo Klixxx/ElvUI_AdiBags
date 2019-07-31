@@ -359,10 +359,10 @@ function buttonProto:UpdateSearch()
 	local _, _, _, _, _, _, _, isFiltered = GetContainerItemInfo(self.bag, self.slot)
 	if isFiltered then
 		self.searchOverlay:Show();
-		self:SetAlpha(0.2)
+		self:SetAlpha(0.2) -- ElvUI Mod!
 	else
 		self.searchOverlay:Hide();
-		self:SetAlpha(1)
+		self:SetAlpha(1) -- ElvUI Mod!
 	end
 end
 
@@ -420,8 +420,8 @@ function buttonProto:UpdateBorder(isolatedEvent)
 			border:SetTexture(texture)
 			border:SetVertexColor(r or 1, g or 1, b or 1, a or 1)
 		end
-		border:SetTexCoord(unpack(ElvUI[1].TexCoords))
-		border:SetInside()
+		border:SetTexCoord(unpack(ElvUI[1].TexCoords)) -- ElvUI Mod!
+		border:SetInside() -- ElvUI Mod!
 		border:SetBlendMode(blendMode or "BLEND")
 		border:Show()
 	end
