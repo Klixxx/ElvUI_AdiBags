@@ -293,16 +293,8 @@ end
 
 function mod:ShowPixelGlow(button, enable)
 	if enable then
-		local _, _, _, quality = GetContainerItemInfo(button.bag, button.slot)
-		if quality and NEW_ITEM_ATLAS_BY_QUALITY[quality] then
-			button.NewItemTexture:SetAtlas(NEW_ITEM_ATLAS_BY_QUALITY[quality])
-		else
-			button.NewItemTexture:SetAtlas("bags-glow-white")
-		end
-		button.NewItemTexture:Show()
 		LCG.PixelGlow_Start(button, mod.db.profile.glowColor, nil, -0.25, nil, 2, 1, 0)
 	else
-		button.NewItemTexture:Hide()
 		LCG.PixelGlow_Stop(button)
 	end
 end
