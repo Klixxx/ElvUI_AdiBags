@@ -367,6 +367,8 @@ function buttonProto:UpdateSearch()
 end
 
 function buttonProto:UpdateCooldown()
+	ElvUI[1]:RegisterCooldown(_G[self:GetName().."Cooldown"])
+	_G[self:GetName().."Cooldown"]:SetOutside(self, 1, 0)
 	return ContainerFrame_UpdateCooldown(self.bag, self)
 end
 
