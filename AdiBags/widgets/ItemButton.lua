@@ -359,8 +359,10 @@ function buttonProto:UpdateSearch()
 	local _, _, _, _, _, _, _, isFiltered = GetContainerItemInfo(self.bag, self.slot)
 	if isFiltered then
 		self.searchOverlay:Show();
+		self:SetAlpha(0.2)
 	else
 		self.searchOverlay:Hide();
+		self:SetAlpha(1)
 	end
 end
 
