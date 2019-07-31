@@ -382,7 +382,6 @@ function containerProto:CreateReagentTabButton()
 			)
 		end
 	)
-	ElvUI[1]:GetModule("Skins"):HandleButton(button) -- ElvUI Mod!
 end
 
 --------------------------------------------------------------------------------
