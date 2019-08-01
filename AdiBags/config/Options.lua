@@ -554,11 +554,20 @@ local function GetOptions()
 									return info.handler:IsDisabled(info) or not addon.db.profile.qualityHighlight
 								end,
 							},
+							allHighlight = {
+								name = L['Highlight All'],
+								desc = L['Check this to display borders around every item in your bag.'],
+								type = 'toggle',
+								order = 225,
+								disabled = function(info)
+									return info.handler:IsDisabled(info) or not addon.db.profile.qualityHighlight
+								end,
+							},
 							dimJunk = {
 								name = L['Dim junk'],
 								desc = L['Check this to have poor quality items dimmed.'],
 								type = 'toggle',
-								order = 225,
+								order = 230,
 								disabled = function(info)
 									return info.handler:IsDisabled(info) or not addon.db.profile.qualityHighlight
 								end,

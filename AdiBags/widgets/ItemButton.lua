@@ -335,7 +335,9 @@ function buttonProto:Update()
 		end
 		self.IconQuestTexture:Hide()
 	else
-		--self:SetBackdropBorderColor(1, 1, 1)
+		if self.texture and addon.db.profile.allHighlight then
+			self:SetBackdropBorderColor(1, 1, 1)
+		end
 		self.IconQuestTexture:Show()
 	end
 	addon:SendMessage('AdiBags_UpdateButton', self)
