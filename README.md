@@ -3,7 +3,7 @@ This is a modified version of AdiBags, which will skin it, so it looks like ElvU
 
 <a href="https://imgur.com/NFwUh3v"><img src="https://i.imgur.com/NFwUh3v.png" title="source: imgur.com" /></a>
 
-This skin is nearly perfect, there are still some small issues i need to address.
+This skin is nearly perfect, tho there still is some small issues i need to address.
 
 Here is a list of known issues:
 - [x] Hovering over items in your bag/bank will hide the border color, reopen the bag will display the borders again. **-- Fixed in build 0.03**
