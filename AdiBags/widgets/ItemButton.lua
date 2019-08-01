@@ -425,8 +425,6 @@ function buttonProto:UpdateBorder(isolatedEvent)
 			border:SetTexture(texture)
 			border:SetVertexColor(r or 1, g or 1, b or 1, a or 1)
 		end
-		border:SetTexCoord(unpack(ElvUI[1].TexCoords)) -- ElvUI Mod!
-		border:SetInside() -- ElvUI Mod!
 		border:SetBlendMode(blendMode or "BLEND")
 		border:Show()
 	end
