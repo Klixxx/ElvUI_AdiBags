@@ -263,6 +263,7 @@ end
 function buttonProto:UNIT_QUEST_LOG_CHANGED(event, unit)
 	if unit == "player" then
 		self:UpdateBorder(event)
+		self:UpdateElvUISkin()
 	end
 end
 
@@ -317,7 +318,13 @@ function buttonProto:Update()
 		self:UpdateSearch()
 	end
 	
-	-- ElvUI Mod!
+	self:UpdateElvUISkin() -- ElvUI Mod!
+	
+	addon:SendMessage('AdiBags_UpdateButton', self)
+end
+
+-- ElvUI Mod!
+function buttonProto:UpdateElvUISkin()
 	self:SetNormalTexture("")
 	self:SetPushedTexture("")
 	   
@@ -350,13 +357,11 @@ function buttonProto:Update()
 			return TEXTURE_ITEM_QUEST_BANG
 		end
 		if questId or isQuestItem then
-			--self:SetBackdropBorderColor(1, 0.3, 0.3)
-			self:SetBackdropBorderColor(1, 1, 0)
+			self:SetBackdropBorderColor(1, 0.3, 0.3)
+			--self:SetBackdropBorderColor(1, 1, 0)
 			self.IconQuestTexture:Hide()
 		end
 	end
-	
-	addon:SendMessage('AdiBags_UpdateButton', self)
 end
 
 function buttonProto:UpdateCount()
