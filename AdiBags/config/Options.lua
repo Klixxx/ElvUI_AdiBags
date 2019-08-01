@@ -556,7 +556,7 @@ local function GetOptions()
 							},
 							allHighlight = {
 								name = L['Highlight All'],
-								desc = L['Check this to display borders around every item in your bag.'],
+								desc = L['Check this to display borders around no quality items in your bag.'],
 								type = 'toggle',
 								order = 225,
 								disabled = function(info)
