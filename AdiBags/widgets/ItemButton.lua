@@ -331,6 +331,7 @@ function buttonProto:Update()
 		self:SetBackdropBorderColor(self.IconQuestTexture:GetVertexColor())
 		self.IconQuestTexture:Hide()
 	else
+		--self:SetBackdropBorderColor(1, 1, 1)
 		self.IconQuestTexture:Show()
 	end
 	addon:SendMessage('AdiBags_UpdateButton', self)
@@ -428,7 +429,6 @@ function buttonProto:UpdateBorder(isolatedEvent)
 		border:SetBlendMode(blendMode or "BLEND")
 		border:Show()
 	end
-		
 	if self.JunkIcon then
 		local quality = self.hasItem and select(3, GetItemInfo(self.itemLink or self.itemId))
 		self.JunkIcon:SetShown(quality == LE_ITEM_QUALITY_POOR and addon:GetInteractingWindow() == "MERCHANT")
