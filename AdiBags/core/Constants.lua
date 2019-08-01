@@ -131,7 +131,7 @@ addon.DEFAULT_SETTINGS = {
 		},
 		maxHeight = 0.60,
 		qualityHighlight = true,
-		allHighlight = true,
+		allHighlight = false,
 		qualityOpacity = 1.0,
 		dimJunk = true,
 		questIndicator = true,

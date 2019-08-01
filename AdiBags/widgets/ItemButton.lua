@@ -340,6 +340,22 @@ function buttonProto:Update()
 		end
 		self.IconQuestTexture:Show()
 	end
+	
+	-- I need to call this again if i need to ElvUI style the borders of the quest items :(
+	if addon.db.profile.questIndicator then
+		local bag, slot = self.bag, self.slot
+		local isQuestItem, questId, isActive = GetContainerItemQuestInfo(bag, slot)
+		if questId and not isActive then
+			self:SetBackdropBorderColor(1, 1, 0)
+			return TEXTURE_ITEM_QUEST_BANG
+		end
+		if questId or isQuestItem then
+			--self:SetBackdropBorderColor(1, 0.3, 0.3)
+			self:SetBackdropBorderColor(1, 1, 0)
+			self.IconQuestTexture:Hide()
+		end
+	end
+	
 	addon:SendMessage('AdiBags_UpdateButton', self)
 end
 
@@ -399,7 +415,7 @@ local function GetBorder(bag, slot, itemId, settings)
 			return TEXTURE_ITEM_QUEST_BANG
 		end
 		if questId or isQuestItem then
-			return TEXTURE_ITEM_QUEST_BORDER
+			--return TEXTURE_ITEM_QUEST_BORDER
 		end
 	end
 	if not settings.qualityHighlight then
