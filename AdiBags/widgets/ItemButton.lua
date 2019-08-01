@@ -435,18 +435,20 @@ function buttonProto:UpdateBorder(isolatedEvent)
 		border:SetBlendMode(blendMode or "BLEND")
 		border:Show()
 	end
+	
+	-- Adding this will prevent the ElvUI borders disappearing when mouseover an item!
+	if self.IconQuestTexture:GetBlendMode() == "ADD" then
+		self:SetBackdropBorderColor(self.IconQuestTexture:GetVertexColor())
+		self.IconQuestTexture:Hide()
+	else
+		self.IconQuestTexture:Show()
+	end
+		
 	if self.JunkIcon then
 		local quality = self.hasItem and select(3, GetItemInfo(self.itemLink or self.itemId))
 		self.JunkIcon:SetShown(quality == LE_ITEM_QUALITY_POOR and addon:GetInteractingWindow() == "MERCHANT")
 	end
 	if isolatedEvent then
-		-- Adding this will prevent the ElvUI borders disappearing when mouseover an item!
-		if self.IconQuestTexture:GetBlendMode() == "ADD" then
-			self:SetBackdropBorderColor(self.IconQuestTexture:GetVertexColor())
-			self.IconQuestTexture:Hide()
-		else
-			self.IconQuestTexture:Show()
-		end
 		addon:SendMessage('AdiBags_UpdateBorder', self)
 	end
 end
