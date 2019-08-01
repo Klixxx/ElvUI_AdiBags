@@ -323,11 +323,6 @@ function buttonProto:Update()
 	   
 	AddOnSkins[1]:SetTemplate(self)
 	AddOnSkins[1]:StyleButton(self)
-	   
-	AddOnSkins[1]:SkinTexture(self.icon)
-	self.icon:SetInside()
-	   
-	self.IconBorder:SetAlpha(0)
 	
 	if IsAddOnLoaded("ElvUI_KlixUI") then
 		ElvUI_KlixUI[1]:GetModule("KuiButtonStyle"):StyleButton(self)
