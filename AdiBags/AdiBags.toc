@@ -22,7 +22,7 @@
 ## Title: |cfffe7b2cElvUI|r AdiBags
 ## Notes: Adirelle's bag addon. (Modified by |cfff960d9Klix|r)
 ## Author: Adirelle, Klix
-## Version: v1.9.17 build 0.02
+## Version: v1.9.17 build 0.03
 ## SavedVariables: AdiBagsDB
 ## X-Date: 2019-07-09T18:22:10Z
 ## X-License: GPL v3
