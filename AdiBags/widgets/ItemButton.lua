@@ -328,7 +328,11 @@ function buttonProto:Update()
 		ElvUI_KlixUI[1]:GetModule("KuiButtonStyle"):StyleButton(self)
 	end
 	if self.IconQuestTexture:GetBlendMode() == "ADD" then
-		self:SetBackdropBorderColor(self.IconQuestTexture:GetVertexColor())
+		if self.texture then -- Fix for free space button border when rebuying items with a border!
+			self:SetBackdropBorderColor(self.IconQuestTexture:GetVertexColor())
+		else
+			self:SetBackdropBorderColor(0, 0, 0, 0)
+		end
 		self.IconQuestTexture:Hide()
 	else
 		--self:SetBackdropBorderColor(1, 1, 1)
