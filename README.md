@@ -1,7 +1,7 @@
 # ElvUI AdiBags
 This is a modified version of AdiBags, which will skin it, so it looks like ElvUI again!
 
-[Imgur](https://i.imgur.com/NFwUh3v.png)
+<a href="https://imgur.com/NFwUh3v"><img src="https://i.imgur.com/NFwUh3v.png" title="source: imgur.com" /></a>
 
 This skin is nearly perfect, there are still some small issues i need to address.
 
