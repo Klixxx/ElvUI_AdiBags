@@ -318,7 +318,17 @@ function buttonProto:Update()
 	end
 	
 	-- ElvUI Mod!
-	AddOnSkins[1]:SkinIconButton(self) -- ElvUI Mod!
+	self:SetNormalTexture("")
+	self:SetPushedTexture("")
+	   
+	AddOnSkins[1]:SetTemplate(self)
+	AddOnSkins[1]:StyleButton(self)
+	   
+	AddOnSkins[1]:SkinTexture(self.icon)
+	self.icon:SetInside()
+	   
+	self.IconBorder:SetAlpha(0)
+	
 	if IsAddOnLoaded("ElvUI_KlixUI") then
 		ElvUI_KlixUI[1]:GetModule("KuiButtonStyle"):StyleButton(self)
 	end
@@ -430,6 +440,13 @@ function buttonProto:UpdateBorder(isolatedEvent)
 		self.JunkIcon:SetShown(quality == LE_ITEM_QUALITY_POOR and addon:GetInteractingWindow() == "MERCHANT")
 	end
 	if isolatedEvent then
+		-- Adding this will prevent the ElvUI borders disappearing when mouseover an item!
+		if self.IconQuestTexture:GetBlendMode() == "ADD" then
+			self:SetBackdropBorderColor(self.IconQuestTexture:GetVertexColor())
+			self.IconQuestTexture:Hide()
+		else
+			self.IconQuestTexture:Show()
+		end
 		addon:SendMessage('AdiBags_UpdateBorder', self)
 	end
 end
