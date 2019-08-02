@@ -314,6 +314,7 @@ function buttonProto:Update()
 	self:UpdateLock()
 	self:UpdateNew()
 	self:UpdateUpgradeIcon()
+	self:CreateScrapIcon()
 	if self.UpdateSearch then
 		self:UpdateSearch()
 	end
@@ -361,6 +362,30 @@ function buttonProto:UpdateElvUISkin()
 			--self:SetBackdropBorderColor(1, 1, 0)
 			self.IconQuestTexture:Hide()
 		end
+	end
+end
+
+function buttonProto:CreateScrapIcon()
+	if not self.ScrapIcon then
+		self.ScrapIcon = self:CreateTexture(nil, "ARTWORK")
+		self.ScrapIcon:SetAtlas("bags-icon-scrappable")
+		self.ScrapIcon:SetSize(14, 12)
+		self.ScrapIcon:SetPoint("TOPRIGHT", -2, -1)
+	end
+	
+	if self.ScrapIcon then
+		local itemLocation = _G.ItemLocation:CreateFromBagAndSlot(self.bag, self.slot)
+		if itemLocation then
+			if C_Item.DoesItemExist(itemLocation) and C_Item.CanScrapItem(itemLocation) and addon.db.profile.scrapIndicator then
+				self.ScrapIcon:SetShown(itemLocation)
+			else
+				self.ScrapIcon:SetShown(false)
+			end
+		end
+	end
+	
+	if not addon.db.profile.scrapIndicator then
+		self.ScrapIcon:SetShown(false)
 	end
 end
 

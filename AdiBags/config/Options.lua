@@ -580,6 +580,12 @@ local function GetOptions()
 						type = 'toggle',
 						order = 230,
 					},
+					scrapIndicator = {
+						name = L['Scrap indicator'],
+						desc = L['Check this to display an indicator on scrappable items.'],
+						type = 'toggle',
+						order = 235,
+					},
 					showBagType = {
 						name = L['Bag type'],
 						desc = L['Check this to display a bag type tag in the top left corner of items.'],
