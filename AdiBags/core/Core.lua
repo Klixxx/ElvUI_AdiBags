@@ -313,6 +313,7 @@ do
 	button:SetText(L['Configure'])
 	button:SetWidth(128)
 	button:SetPoint("TOPLEFT", 10, -48)
+	ElvUI[1]:GetModule("Skins"):HandleButton(button) -- ElvUI Mod!
 	button:SetScript('OnClick', function()
 		while CloseWindows() do end
 		return addon:OpenOptions()
