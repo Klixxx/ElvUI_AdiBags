@@ -688,7 +688,7 @@ end
 LibStub('AceConfig-3.0'):RegisterOptionsTable(addonName, GetOptions)
 
 function addon:OpenOptions(...)
-	AceConfigDialog:SetDefaultSize(addonName, 800, 600)
+	AceConfigDialog:SetDefaultSize(addonName, 850, 650)
 	if select('#', ...) > 0 then
 		self:Debug('OpenOptions =>', select('#', ...), ...)
 		AceConfigDialog:Open(addonName)
