@@ -63,6 +63,7 @@ function mod:OnInitialize()
 			minLevel = 1,
 			ignoreJunk = true,
 			ignoreHeirloom = true,
+			position = "bottom",
 		},
 	})
 	if self.db.profile.colored == true then
@@ -101,7 +102,6 @@ end
 
 local function CreateText(button)
 	local text = button:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
-	text:SetPoint("TOPLEFT", button, 3, -1)
 	text:Hide()
 	texts[button] = text
 	return text
@@ -134,6 +134,11 @@ function mod:UpdateButton(event, button)
 			end
 			if not text then
 				text = CreateText(button)
+				if settings.position == "top" then
+					text:SetPoint("TOPLEFT", button, 3, -1)
+				else
+					text:SetPoint("BOTTOMLEFT", button, 3, 3)
+				end
 			end
 			text:SetText(level)
 			text:SetTextColor(colorSchemes[settings.colorScheme](level, quality, reqLevel, (loc ~= "")))
@@ -197,6 +202,15 @@ function mod:GetOptions()
 			desc = L['Do not show level of heirloom items.'],
 			type = 'toggle',
 			order = 50,
+		},
+		position = {
+			name = L['Itemlevel position'],
+			type = 'select',
+			order = 60,
+			values = {
+				top = L["Top"],
+				bottom = L["Bottom"],
+			},
 		},
 	}, addon:GetOptionHandler(self)
 end

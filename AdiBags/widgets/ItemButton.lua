@@ -370,7 +370,7 @@ function buttonProto:CreateScrapIcon()
 		self.ScrapIcon = self:CreateTexture(nil, "ARTWORK")
 		self.ScrapIcon:SetAtlas("bags-icon-scrappable")
 		self.ScrapIcon:SetSize(14, 12)
-		self.ScrapIcon:SetPoint("TOPRIGHT", -2, -1)
+		self.ScrapIcon:SetPoint("TOPRIGHT", -2, -2)
 	end
 	
 	if self.ScrapIcon then
