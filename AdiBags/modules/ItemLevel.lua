@@ -205,6 +205,7 @@ function mod:GetOptions()
 		},
 		position = {
 			name = L['Itemlevel position'],
+			desc = L['Please do a /rl after changing the itemlevel position.'],
 			type = 'select',
 			order = 60,
 			values = {
