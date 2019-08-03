@@ -176,8 +176,7 @@ function containerProto:OnCreate(name, isBank, bagObject)
 
 	local bagSlotButton = CreateFrame("CheckButton", nil, self)
 	bagSlotButton:SetNormalTexture([[Interface\Buttons\Button-Backpack-Up]])
-	bagSlotButton:SetCheckedTexture([[Interface\Buttons\CheckButtonHilight]])
-	bagSlotButton:GetCheckedTexture():SetBlendMode("ADD")
+	bagSlotButton:GetNormalTexture():SetTexCoord(unpack(ElvUI[1].TexCoords))
 	bagSlotButton:SetScript('OnClick', BagSlotButton_OnClick)
 	bagSlotButton.panel = bagSlotPanel
 	bagSlotButton:SetWidth(18)
@@ -190,8 +189,6 @@ function containerProto:OnCreate(name, isBank, bagObject)
 	headerLeftRegion:AddWidget(bagSlotButton, 50)
 	
 	-- ElvUI Mod!
-	bagSlotButton:GetCheckedTexture():SetTexCoord(unpack(ElvUI[1].TexCoords))
-	ElvUI[1]:GetModule("Skins"):HandleIcon(bagSlotButton:GetNormalTexture()) -- ElvUI Mod!
 	if IsAddOnLoaded("ElvUI") then
 		bagSlotButton:CreateBackdrop()
 	end
