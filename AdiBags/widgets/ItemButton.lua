@@ -295,11 +295,13 @@ function buttonProto:Update()
 		icon:SetTexture(self.texture)
 		--icon:SetTexCoord(0,1,0,1)
 		icon:SetTexCoord(unpack(ElvUI[1].TexCoords)) -- ElvUI Mod!
+		icon:SetInside()
 	else
 		--icon:SetTexture([[Interface\BUTTONS\UI-EmptySlot]])
 		--icon:SetTexCoord(12/64, 51/64, 12/64, 51/64)
-		icon:SetTexture("") -- ElvUI Mod!
+		icon:SetTexture() -- ElvUI Mod!
 		icon:SetTexCoord(unpack(ElvUI[1].TexCoords)) -- ElvUI Mod!
+		icon:SetInside()
 	end
 	local tag = (not self.itemId or addon.db.profile.showBagType) and addon:GetFamilyTag(self.bagFamily)
 	if tag then
@@ -318,20 +320,18 @@ function buttonProto:Update()
 	if self.UpdateSearch then
 		self:UpdateSearch()
 	end
-	
+
 	self:UpdateElvUISkin() -- ElvUI Mod!
-	
+
 	addon:SendMessage('AdiBags_UpdateButton', self)
 end
 
 -- ElvUI Mod!
 function buttonProto:UpdateElvUISkin()
-	self:SetNormalTexture("")
-	self:SetPushedTexture("")
-	   
-	AddOnSkins[1]:SetTemplate(self)
-	AddOnSkins[1]:StyleButton(self)
-	
+	self:SetTemplate(nil, true)
+	self:StyleButton()
+	self:SetNormalTexture(nil)
+
 	if IsAddOnLoaded("ElvUI_KlixUI") then
 		ElvUI_KlixUI[1]:GetModule("KuiButtonStyle"):StyleButton(self)
 	end
@@ -348,7 +348,7 @@ function buttonProto:UpdateElvUISkin()
 		end
 		self.IconQuestTexture:Show()
 	end
-	
+
 	-- I need to call this again if i need to ElvUI style the borders of the quest items :(
 	if addon.db.profile.questIndicator then
 		local bag, slot = self.bag, self.slot
@@ -372,7 +372,7 @@ function buttonProto:CreateScrapIcon()
 		self.ScrapIcon:SetSize(14, 12)
 		self.ScrapIcon:SetPoint("TOPRIGHT", -2, -2)
 	end
-	
+
 	if self.ScrapIcon then
 		local itemLocation = _G.ItemLocation:CreateFromBagAndSlot(self.bag, self.slot)
 		if itemLocation then
@@ -383,7 +383,7 @@ function buttonProto:CreateScrapIcon()
 			end
 		end
 	end
-	
+
 	if not addon.db.profile.scrapIndicator then
 		self.ScrapIcon:SetShown(false)
 	end
