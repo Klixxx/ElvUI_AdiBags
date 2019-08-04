@@ -349,18 +349,25 @@ function buttonProto:UpdateElvUISkin()
 		self.IconQuestTexture:Show()
 	end
 
-	-- I need to call this again if i need to ElvUI style the borders of the quest items :(
+	self:SetBackdropBorderColor(ElvUI[1].media.bordercolor)
+
+	local bag, slot = self.bag, self.slot
 	if addon.db.profile.questIndicator then
-		local bag, slot = self.bag, self.slot
 		local isQuestItem, questId, isActive = GetContainerItemQuestInfo(bag, slot)
 		if questId and not isActive then
 			self:SetBackdropBorderColor(1, 1, 0)
-			return TEXTURE_ITEM_QUEST_BANG
-		end
-		if questId or isQuestItem then
+			self.IconQuestTexture:Show()
+		elseif questId or isQuestItem then
 			self:SetBackdropBorderColor(1, 0.3, 0.3)
-			--self:SetBackdropBorderColor(1, 1, 0)
 			self.IconQuestTexture:Hide()
+		end
+	end
+
+	if addon.db.profile.qualityOpacity then
+		local _, _, _, quality = GetContainerItemInfo(bag, slot)
+		if quality and addon.db.profile.allHighlight or quality and quality > LE_ITEM_QUALITY_COMMON then
+			local r, g, b = GetItemQualityColor(quality)
+			self:SetBackdropBorderColor(r, g, b)
 		end
 	end
 end
