@@ -85,9 +85,6 @@ function buttonProto:OnCreate()
 	self:SetTemplate(nil, true)
 	self:StyleButton()
 	self:SetNormalTexture(nil)
-	if ElvUI_KlixUI then
-		ElvUI_KlixUI[1]:GetModule("KuiButtonStyle"):StyleButton(self)
-	end
 	if not self.ScrapIcon then
 		local scrapIcon = self:CreateTexture(nil, "OVERLAY")
 		scrapIcon:SetAtlas("bags-icon-scrappable")
@@ -334,6 +331,7 @@ function buttonProto:Update()
 	self:UpdateNew()
 	self:UpdateUpgradeIcon()
 	self:UpdateScrapIcon()
+	self:UpdateKlixStyling()
 	if self.UpdateSearch then
 		self:UpdateSearch()
 	end
@@ -392,6 +390,12 @@ function buttonProto:UpdateScrapIcon()
 	local itemLocation = _G.ItemLocation:CreateFromBagAndSlot(self.bag, self.slot)
 	if itemLocation then
 		self.ScrapIcon:SetShown(addon.db.profile.scrapIndicator and C_Item_DoesItemExist(itemLocation) and C_Item_CanScrapItem(itemLocation) or false)
+	end
+end
+
+function buttonProto:UpdateKlixStyling()
+	if ElvUI_KlixUI then
+		ElvUI_KlixUI[1]:GetModule("KuiButtonStyle"):StyleButton(self)
 	end
 end
 
