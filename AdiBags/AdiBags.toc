@@ -27,7 +27,7 @@
 ## X-Date: 2019-07-09T18:22:10Z
 ## X-License: GPL v3
 ## RequiredDeps: ElvUI
-## OptionalDeps: ElvUI_KlixUI, LibStub, CallbackHandler-1.0, Ace3, LibSharedMedia-3.0, Scrap, BrainDead, !BugGrabber, SyLevel
+## OptionalDeps: ElvUI_KlixUI, ElvUI_MerathilisUI, ElvUI_BenikUI, LibStub, CallbackHandler-1.0, Ace3, LibSharedMedia-3.0, Scrap, BrainDead, !BugGrabber, SyLevel
 #@alpha@
 # ## OptionalDeps: AdiDebug, BugSack, Swatter
 #@end-alpha@
