@@ -19,12 +19,15 @@ You should have received a copy of the GNU General Public License
 along with AdiBags.  If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local addonName, addon = ...
+local _, addon = ...
 
 --<GLOBALS
 local _G = _G
+local BAG_ITEM_QUALITY_COLORS = _G.BAG_ITEM_QUALITY_COLORS
 local BankButtonIDToInvSlotID = _G.BankButtonIDToInvSlotID
 local BANK_CONTAINER = _G.BANK_CONTAINER
+local C_Item_CanScrapItem = _G.C_Item.CanScrapItem
+local C_Item_DoesItemExist = _G.C_Item.DoesItemExist
 local ContainerFrame_UpdateCooldown = _G.ContainerFrame_UpdateCooldown
 local format = _G.format
 local GetContainerItemID = _G.GetContainerItemID
@@ -33,19 +36,23 @@ local GetContainerItemLink = _G.GetContainerItemLink
 local GetContainerItemQuestInfo = _G.GetContainerItemQuestInfo
 local GetContainerNumFreeSlots = _G.GetContainerNumFreeSlots
 local GetItemInfo = _G.GetItemInfo
-local GetItemQualityColor = _G.GetItemQualityColor
 local hooksecurefunc = _G.hooksecurefunc
+local IsBattlePayItem = _G.IsBattlePayItem
+local IsContainerItemAnUpgrade = _G.IsContainerItemAnUpgrade
 local IsInventoryItemLocked = _G.IsInventoryItemLocked
-local ITEM_QUALITY_POOR = _G.LE_ITEM_QUALITY_POOR
-local ITEM_QUALITY_UNCOMMON = _G.LE_ITEM_QUALITY_UNCOMMON
+local LE_ITEM_QUALITY_POOR = _G.LE_ITEM_QUALITY_POOR
+local LE_ITEM_QUALITY_COMMON = _G.LE_ITEM_QUALITY_UNCOMMON
 local next = _G.next
 local pairs = _G.pairs
+local REAGENTBANK_CONTAINER = _G.REAGENTBANK_CONTAINER
+local ReagentBankButtonIDToInvSlotID = _G.ReagentBankButtonIDToInvSlotID
 local select = _G.select
 local SetItemButtonDesaturated = _G.SetItemButtonDesaturated
+local SplitContainerItem = _G.SplitContainerItem
 local StackSplitFrame = _G.StackSplitFrame
 local TEXTURE_ITEM_QUEST_BANG = _G.TEXTURE_ITEM_QUEST_BANG
-local TEXTURE_ITEM_QUEST_BORDER = _G.TEXTURE_ITEM_QUEST_BORDER
 local tostring = _G.tostring
+local unpack = _G.unpack
 local wipe = _G.wipe
 --GLOBALS>
 
@@ -64,7 +71,7 @@ local childrenNames = { "Cooldown", "IconTexture", "IconQuestTexture", "Count", 
 
 function buttonProto:OnCreate()
 	local name = self:GetName()
-	for i, childName in pairs(childrenNames ) do
+	for _, childName in pairs(childrenNames ) do
 		if not self[childName] then
 			self[childName] = _G[name..childName]
 		end
@@ -75,6 +82,20 @@ function buttonProto:OnCreate()
 	self:SetScript('OnHide', self.OnHide)
 	self:SetWidth(ITEM_SIZE)
 	self:SetHeight(ITEM_SIZE)
+	self:SetTemplate(nil, true)
+	self:StyleButton()
+	self:SetNormalTexture(nil)
+	if ElvUI_KlixUI then
+		ElvUI_KlixUI[1]:GetModule("KuiButtonStyle"):StyleButton(self)
+	end
+	if not self.ScrapIcon then
+		local scrapIcon = self:CreateTexture(nil, "OVERLAY")
+		scrapIcon:SetAtlas("bags-icon-scrappable")
+		scrapIcon:Size(14, 12)
+		scrapIcon:SetPoint("TOPRIGHT", -2, -2)
+		scrapIcon:Hide()
+		self.ScrapIcon = scrapIcon
+	end
 	if self.NewItemTexture then
 		self.NewItemTexture:Hide()
 	end
@@ -263,7 +284,6 @@ end
 function buttonProto:UNIT_QUEST_LOG_CHANGED(event, unit)
 	if unit == "player" then
 		self:UpdateBorder(event)
-		self:UpdateElvUISkin()
 	end
 end
 
@@ -293,14 +313,11 @@ function buttonProto:Update()
 	local icon = self.IconTexture
 	if self.texture then
 		icon:SetTexture(self.texture)
-		--icon:SetTexCoord(0,1,0,1)
-		icon:SetTexCoord(unpack(ElvUI[1].TexCoords)) -- ElvUI Mod!
+		icon:SetTexCoord(unpack(ElvUI[1].TexCoords))
 		icon:SetInside()
 	else
-		--icon:SetTexture([[Interface\BUTTONS\UI-EmptySlot]])
-		--icon:SetTexCoord(12/64, 51/64, 12/64, 51/64)
-		icon:SetTexture() -- ElvUI Mod!
-		icon:SetTexCoord(unpack(ElvUI[1].TexCoords)) -- ElvUI Mod!
+		icon:SetTexture()
+		icon:SetTexCoord(unpack(ElvUI[1].TexCoords))
 		icon:SetInside()
 	end
 	local tag = (not self.itemId or addon.db.profile.showBagType) and addon:GetFamilyTag(self.bagFamily)
@@ -316,84 +333,11 @@ function buttonProto:Update()
 	self:UpdateLock()
 	self:UpdateNew()
 	self:UpdateUpgradeIcon()
-	self:CreateScrapIcon()
+	self:UpdateScrapIcon()
 	if self.UpdateSearch then
 		self:UpdateSearch()
 	end
-
-	self:UpdateElvUISkin() -- ElvUI Mod!
-
 	addon:SendMessage('AdiBags_UpdateButton', self)
-end
-
--- ElvUI Mod!
-function buttonProto:UpdateElvUISkin()
-	self:SetTemplate(nil, true)
-	self:StyleButton()
-	self:SetNormalTexture(nil)
-
-	if IsAddOnLoaded("ElvUI_KlixUI") then
-		ElvUI_KlixUI[1]:GetModule("KuiButtonStyle"):StyleButton(self)
-	end
-	if self.IconQuestTexture:GetBlendMode() == "ADD" then
-		if self.texture then -- Fix for free space button border when rebuying items with a border!
-			self:SetBackdropBorderColor(self.IconQuestTexture:GetVertexColor())
-		else
-			self:SetBackdropBorderColor(0, 0, 0, 0)
-		end
-		self.IconQuestTexture:Hide()
-	else
-		if self.texture and addon.db.profile.allHighlight then
-			self:SetBackdropBorderColor(1, 1, 1)
-		end
-		self.IconQuestTexture:Show()
-	end
-
-	self:SetBackdropBorderColor(ElvUI[1].media.bordercolor)
-
-	local bag, slot = self.bag, self.slot
-	if addon.db.profile.qualityHighlight then
-		local _, _, _, quality = GetContainerItemInfo(bag, slot)
-		if quality and addon.db.profile.allHighlight or quality and quality > LE_ITEM_QUALITY_COMMON then
-			local color = BAG_ITEM_QUALITY_COLORS[quality]
-			self:SetBackdropBorderColor(color.r, color.g, color.b)
-		end
-	end
-	
-	if addon.db.profile.questIndicator then
-		local isQuestItem, questId, isActive = GetContainerItemQuestInfo(bag, slot)
-		if questId and not isActive then
-			self:SetBackdropBorderColor(1, 1, 0)
-			self.IconQuestTexture:Show()
-		elseif questId or isQuestItem then
-			self:SetBackdropBorderColor(1, 0.3, 0.3)
-			self.IconQuestTexture:Hide()
-		end
-	end
-end
-
-function buttonProto:CreateScrapIcon()
-	if not self.ScrapIcon then
-		self.ScrapIcon = self:CreateTexture(nil, "ARTWORK")
-		self.ScrapIcon:SetAtlas("bags-icon-scrappable")
-		self.ScrapIcon:SetSize(14, 12)
-		self.ScrapIcon:SetPoint("TOPRIGHT", -2, -2)
-	end
-
-	if self.ScrapIcon then
-		local itemLocation = _G.ItemLocation:CreateFromBagAndSlot(self.bag, self.slot)
-		if itemLocation then
-			if C_Item.DoesItemExist(itemLocation) and C_Item.CanScrapItem(itemLocation) and addon.db.profile.scrapIndicator then
-				self.ScrapIcon:SetShown(itemLocation)
-			else
-				self.ScrapIcon:SetShown(false)
-			end
-		end
-	end
-
-	if not addon.db.profile.scrapIndicator then
-		self.ScrapIcon:SetShown(false)
-	end
 end
 
 function buttonProto:UpdateCount()
@@ -423,17 +367,16 @@ end
 function buttonProto:UpdateSearch()
 	local _, _, _, _, _, _, _, isFiltered = GetContainerItemInfo(self.bag, self.slot)
 	if isFiltered then
-		self.searchOverlay:Show();
-		self:SetAlpha(0.2) -- ElvUI Mod!
+		self.searchOverlay:Show()
+		self:SetAlpha(0.5)
 	else
-		self.searchOverlay:Hide();
-		self:SetAlpha(1) -- ElvUI Mod!
+		self.searchOverlay:Hide()
+		self:SetAlpha(1)
 	end
 end
 
 function buttonProto:UpdateCooldown()
-	ElvUI[1]:RegisterCooldown(_G[self:GetName().."Cooldown"]) -- ElvUI Mod!
-	_G[self:GetName().."Cooldown"]:SetOutside(self, 1, 0) -- ElvUI Mod!
+	ElvUI[1]:RegisterCooldown(self.Cooldown)
 	return ContainerFrame_UpdateCooldown(self.bag, self)
 end
 
@@ -445,14 +388,21 @@ function buttonProto:UpdateUpgradeIcon()
 	self.UpgradeIcon:SetShown(IsContainerItemAnUpgrade(self.bag, self.slot) or false)
 end
 
-local function GetBorder(bag, slot, itemId, settings)
+function buttonProto:UpdateScrapIcon()
+	local itemLocation = _G.ItemLocation:CreateFromBagAndSlot(self.bag, self.slot)
+	if itemLocation then
+		self.ScrapIcon:SetShown(addon.db.profile.scrapIndicator and C_Item_DoesItemExist(itemLocation) and C_Item_CanScrapItem(itemLocation) or false)
+	end
+end
+
+local function GetBorder(bag, slot, settings)
 	if settings.questIndicator then
 		local isQuestItem, questId, isActive = GetContainerItemQuestInfo(bag, slot)
 		if questId and not isActive then
-			return TEXTURE_ITEM_QUEST_BANG
+			return TEXTURE_ITEM_QUEST_BANG, 1, 1, 0
 		end
 		if questId or isQuestItem then
-			--return TEXTURE_ITEM_QUEST_BORDER
+			return nil, 1, 0.3, 0.3
 		end
 	end
 	if not settings.qualityHighlight then
@@ -461,30 +411,35 @@ local function GetBorder(bag, slot, itemId, settings)
 	local _, _, _, quality = GetContainerItemInfo(bag, slot)
 	if quality == LE_ITEM_QUALITY_POOR and settings.dimJunk then
 		local v = 1 - 0.5 * settings.qualityOpacity
-		return true, v, v, v, 1, nil, nil, nil, nil, "MOD"
+		return true, v, v, v, 1, "MOD"
 	end
 	local color = quality ~= LE_ITEM_QUALITY_COMMON and BAG_ITEM_QUALITY_COLORS[quality]
 	if color then
-		return [[Interface\Buttons\UI-ActionButton-Border]], color.r, color.g, color.b, settings.qualityOpacity, 14/64, 49/64, 15/64, 50/64, "ADD"
+		return [[Interface\Buttons\UI-ActionButton-Border]], color.r, color.g, color.b, settings.qualityOpacity, "ADD"
 	end
 end
 
 function buttonProto:UpdateBorder(isolatedEvent)
-	local texture, r, g, b, a, x1, x2, y1, y2, blendMode
+	self:SetBackdropBorderColor(unpack(ElvUI[1].media.bordercolor))
+	local texture, r, g, b, a, blendMode
 	if self.hasItem then
-		texture, r, g, b, a, x1, x2, y1, y2, blendMode = GetBorder(self.bag, self.slot, self.itemLink or self.itemId, addon.db.profile)
+		texture, r, g, b, a, blendMode = GetBorder(self.bag, self.slot, addon.db.profile)
 	end
-	if not texture then
-		self.IconQuestTexture:Hide()
+	local border = self.IconQuestTexture
+	if not texture and texture ~= nil then
+		border:Hide()
 	else
-		local border = self.IconQuestTexture
 		if texture == true then
-			border:SetVertexColor(1, 1, 1, 1)
-			border:SetColorTexture(r or 1, g or 1, b or 1, a or 1)
-		else
+			border:SetColorTexture(r, g, b, a)
+		elseif texture == TEXTURE_ITEM_QUEST_BANG then
 			border:SetTexture(texture)
-			border:SetVertexColor(r or 1, g or 1, b or 1, a or 1)
+			self:SetBackdropBorderColor(r, g, b)
+		else
+			border:SetTexture()
+			self:SetBackdropBorderColor(r, g, b)
 		end
+		border:SetTexCoord(0, 1, 0, 1)
+		border:SetInside()
 		border:SetBlendMode(blendMode or "BLEND")
 		border:Show()
 	end
