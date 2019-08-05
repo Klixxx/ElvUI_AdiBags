@@ -352,7 +352,7 @@ function buttonProto:UpdateElvUISkin()
 	self:SetBackdropBorderColor(ElvUI[1].media.bordercolor)
 
 	local bag, slot = self.bag, self.slot
-	if addon.db.profile.qualityOpacity then
+	if addon.db.profile.qualityHighlight then
 		local _, _, _, quality = GetContainerItemInfo(bag, slot)
 		if quality and addon.db.profile.allHighlight or quality and quality > LE_ITEM_QUALITY_COMMON then
 			local color = BAG_ITEM_QUALITY_COLORS[quality]
