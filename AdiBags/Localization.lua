@@ -162,7 +162,7 @@ L["When checked, right-clicking on an empty space of a bag opens the configurati
 -- core/Core.lua
 L["Error in %s: %s -- details: %s"] = true
 L["BUG_REPORT1"] = "For any issues regarding core AdiBags, please report them to the original author at: https://bit.ly/2yGD94g"
-L["BUG_REPORT2"] = "For any issues ElvUI Skin, please report them here: https://bit.ly/31nDGof"
+L["BUG_REPORT2"] = "For any issues regarding the ElvUI Skin, please report them here: https://bit.ly/31nDGof"
 
 -- core/DefaultFilters.lua
 L["Ammunition"] = true
