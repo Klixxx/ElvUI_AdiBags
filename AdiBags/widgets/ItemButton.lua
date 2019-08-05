@@ -71,7 +71,7 @@ local childrenNames = { "Cooldown", "IconTexture", "IconQuestTexture", "Count", 
 
 function buttonProto:OnCreate()
 	local name = self:GetName()
-	for _, childName in pairs(childrenNames ) do
+	for _, childName in pairs(childrenNames) do
 		if not self[childName] then
 			self[childName] = _G[name..childName]
 		end
