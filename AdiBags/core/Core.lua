@@ -308,11 +308,25 @@ do
 	fs:SetJustifyH("LEFT")
 	fs:SetJustifyV("TOP")
 	fs:SetText(addonName)
-
+	
+	local br1 = panel:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+	br1:SetPoint("TOPLEFT", 10, -35)
+	br1:SetPoint("BOTTOMRIGHT", panel, "TOPRIGHT", 10, -45)
+	br1:SetJustifyH("LEFT")
+	br1:SetJustifyV("TOP")
+	br1:SetText(L["BUG_REPORT1"])
+	
+	local br2 = panel:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+	br2:SetPoint("TOPLEFT", 10, -57)
+	br2:SetPoint("BOTTOMRIGHT", panel, "TOPRIGHT", 10, -45)
+	br2:SetJustifyH("LEFT")
+	br2:SetJustifyV("TOP")
+	br2:SetText(L["BUG_REPORT2"])
+	
 	local button = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
 	button:SetText(L['Configure'])
 	button:SetWidth(128)
-	button:SetPoint("TOPLEFT", 10, -48)
+	button:SetPoint("TOPLEFT", 10, -68)
 	ElvUI[1]:GetModule("Skins"):HandleButton(button) -- ElvUI Mod!
 	button:SetScript('OnClick', function()
 		while CloseWindows() do end
