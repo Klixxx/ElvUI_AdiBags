@@ -590,15 +590,13 @@ function containerProto:UpdateSkin()
 	end
 	
 	-- ElvUI Mod!
-	if ElvUI then
-		self:StripTextures()
-		self:SetTemplate("Transparent")
-		if ElvUI_KlixUI or ElvUI_MerathilisUI then
-			self:Styling()
-		end
-		if ElvUI_BenikUI then
-			self:Style("Inside")
-		end
+	self:StripTextures()
+	self:SetTemplate("Transparent")
+	if ElvUI_KlixUI or ElvUI_MerathilisUI then
+		self:Styling()
+	end
+	if ElvUI_BenikUI then
+		self:Style("Inside")
 	end
 end
 
