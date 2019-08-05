@@ -413,7 +413,7 @@ local function GetBorder(bag, slot, settings)
 		local v = 1 - 0.5 * settings.qualityOpacity
 		return true, v, v, v, 1, "MOD"
 	end
-	local color = quality ~= LE_ITEM_QUALITY_COMMON and BAG_ITEM_QUALITY_COLORS[quality]
+	local color = settings.allHighlight and BAG_ITEM_QUALITY_COLORS[quality] or quality ~= LE_ITEM_QUALITY_COMMON and BAG_ITEM_QUALITY_COLORS[quality]
 	if color then
 		return [[Interface\Buttons\UI-ActionButton-Border]], color.r, color.g, color.b, settings.qualityOpacity, "ADD"
 	end
