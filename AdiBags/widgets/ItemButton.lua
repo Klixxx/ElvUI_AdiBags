@@ -403,10 +403,10 @@ local function GetBorder(bag, slot, settings)
 	if settings.questIndicator then
 		local isQuestItem, questId, isActive = GetContainerItemQuestInfo(bag, slot)
 		if questId and not isActive then
-			return TEXTURE_ITEM_QUEST_BANG, 1, 1, 0
+			return TEXTURE_ITEM_QUEST_BANG, 1, 1, 0, settings.qualityOpacity
 		end
 		if questId or isQuestItem then
-			return nil, 1, 0.3, 0.3
+			return nil, 1, 0.3, 0.3, settings.qualityOpacity
 		end
 	end
 	if not settings.qualityHighlight then
@@ -437,10 +437,10 @@ function buttonProto:UpdateBorder(isolatedEvent)
 			border:SetColorTexture(r, g, b, a)
 		elseif texture == TEXTURE_ITEM_QUEST_BANG then
 			border:SetTexture(texture)
-			self:SetBackdropBorderColor(r, g, b)
+			self:SetBackdropBorderColor(r, g, b, a)
 		else
 			border:SetTexture()
-			self:SetBackdropBorderColor(r, g, b)
+			self:SetBackdropBorderColor(r, g, b, a)
 		end
 		border:SetTexCoord(0, 1, 0, 1)
 		border:SetInside()
