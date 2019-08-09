@@ -154,6 +154,10 @@ function addon:OnEnable()
 	self:RegisterEvent('VOID_STORAGE_CLOSE', 'UpdateInteractingWindow')
 	self:RegisterEvent('SOCKET_INFO_UPDATE', 'UpdateInteractingWindow')
 	self:RegisterEvent('SOCKET_INFO_CLOSE', 'UpdateInteractingWindow')
+	self:RegisterEvent('OBLITERUM_FORGE_SHOW', 'UpdateInteractingWindow')
+	self:RegisterEvent('OBLITERUM_FORGE_CLOSE', 'UpdateInteractingWindow')
+	self:RegisterEvent('SCRAPPING_MACHINE_SHOW', 'UpdateInteractingWindow')
+	self:RegisterEvent('SCRAPPING_MACHINE_CLOSE', 'UpdateInteractingWindow')
 
 	self:SetSortingOrder(self.db.profile.sortingOrder)
 
