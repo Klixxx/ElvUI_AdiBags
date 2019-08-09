@@ -452,6 +452,7 @@ local function GetOptions()
 						type = 'group',
 						inline = true,
 						order = 20,
+						disabled = function() return ElvUI end, -- Disable this section, cause now we skin the bags to match ElvUI!
 						args = {
 							texture = {
 								name = L['Texture'],
