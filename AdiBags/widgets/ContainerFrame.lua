@@ -276,9 +276,13 @@ function containerProto:CreateModuleButton(letter, order, onClick, tooltip)
 	local button = CreateFrame("Button", nil, self, "UIPanelButtonTemplate")
 	button:SetText(letter)
 	button:SetSize(20, 20)
+	--[[button.text = button:CreateFontString(nil, "OVERLAY")
+	button.text:FontTemplate(ElvUI[1].media.font, 11, "OUTLINE")
+	button.text:SetPoint("CENTER", 1, 0)
+	button.text:SetText(letter)]]
 	button:SetScript("OnClick", onClick)
 	button:RegisterForClicks("AnyUp")
-	ElvUI[1]:GetModule("Skins"):HandleButton(button) -- ElvUI Mod!
+	ElvUI[1]:GetModule("Skins"):HandleButton(button)
 	if order then
 		self:AddHeaderWidget(button, order)
 	end
