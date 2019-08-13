@@ -95,9 +95,6 @@ local function ResetButton_OnClick(widget, button)
 	C_NewItems.ClearAll()
 	wipe(newItems)
 	mod.button:Disable()
-	if mod.db.profile.highlight == "pixel" then
-		LCG.PixelGlow_Stop(mod.button)
-	end
 	mod:SendMessage('AdiBags_FiltersChanged', true)
 	mod:SendMessage('AdiBags_UpdateAllButtons', true)
 end
@@ -157,11 +154,6 @@ end
 
 function mod:Filter(slotData)
 	if self:IsNew(slotData.bag, slotData.slot, slotData.link) then
-		if mod.db.profile.highlight == "pixel" then
-			LCG.PixelGlow_Start(self.button, mod.db.profile.glowColor, nil, -0.25, nil, 1)
-		else
-			LCG.PixelGlow_Stop(self.button)
-		end
 		self:UpdateModuleButton()
 		return L["Recent Items"]
 	end
