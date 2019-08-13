@@ -176,7 +176,10 @@ function containerProto:OnCreate(name, isBank, bagObject)
 
 	local bagSlotButton = CreateFrame("CheckButton", nil, self)
 	bagSlotButton:SetNormalTexture([[Interface\Buttons\Button-Backpack-Up]])
-	ElvUI[1]:GetModule("Skins"):HandleIcon(bagSlotButton:GetNormalTexture(), true) -- ElvUI Mod!
+	bagSlotButton:SetCheckedTexture(ElvUI[1].media.normTex)
+	bagSlotButton:GetCheckedTexture():SetVertexColor(1, .82, 0, 0.5)
+	bagSlotButton:GetCheckedTexture():SetInside(bagSlotButton.backdrop, 0, 0)
+	ElvUI[1]:GetModule("Skins"):HandleIcon(bagSlotButton:GetNormalTexture(), true)
 	if ElvUI_KlixUI then
 		ElvUI_KlixUI[1]:GetModule("KuiButtonStyle"):StyleButton(bagSlotButton)
 		bagSlotButton.shadow:SetInside(bagSlotButton, 0, 0)
