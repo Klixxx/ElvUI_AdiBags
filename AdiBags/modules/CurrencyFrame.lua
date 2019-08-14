@@ -99,7 +99,7 @@ function mod:OnBagFrameCreated(bag)
 	if bag.bagName ~= "Backpack" then return end
 	local frame = bag:GetFrame()
 
-	local widget =CreateFrame("Button", addonName.."CurrencyFrame", frame)
+	local widget = CreateFrame("Button", addonName.."CurrencyFrame", frame)
 	self.widget = widget
 	widget:SetHeight(16)
 	widget:RegisterForClicks("RightButtonUp")
