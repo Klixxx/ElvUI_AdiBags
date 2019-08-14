@@ -335,6 +335,18 @@ function buttonProto:Update()
 	if self.UpdateSearch then
 		self:UpdateSearch()
 	end
+	
+	-- Only way i can make the none scrapitems to hide, when the scrappingmachine is opened :S
+	if _G.ScrappingMachineFrame:IsShown() then
+		if not self.ScrapIcon:IsShown() then
+			self.searchOverlay:Show()
+			self:SetAlpha(0.5)
+		end
+	else
+		self.searchOverlay:Hide()
+		self:SetAlpha(1)
+	end
+	
 	addon:SendMessage('AdiBags_UpdateButton', self)
 end
 
@@ -390,7 +402,7 @@ function buttonProto:UpdateScrapIcon()
 	local itemLocation = _G.ItemLocation:CreateFromBagAndSlot(self.bag, self.slot)
 	if itemLocation then
 		self.ScrapIcon:SetShown(addon.db.profile.scrapIndicator and C_Item_DoesItemExist(itemLocation) and C_Item_CanScrapItem(itemLocation) or false)
-	end
+	end	
 end
 
 function buttonProto:UpdateKlixStyling()
