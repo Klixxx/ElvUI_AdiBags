@@ -346,14 +346,16 @@ function buttonProto:Update()
 	end
 	
 	-- Only way i can make the none scrapitems to hide, when the scrappingmachine is opened :S
-	if _G.ScrappingMachineFrame:IsShown() then
-		if not self.ScrapIcon:IsShown() then
-			self.searchOverlay:Show()
-			self:SetAlpha(0.5)
+	if IsAddOnLoaded("Blizzard_ScrappingMachineUI") then
+		if _G.ScrappingMachineFrame:IsShown() then
+			if not self.ScrapIcon:IsShown() then
+				self.searchOverlay:Show()
+				self:SetAlpha(0.5)
+			end
+		else
+			self.searchOverlay:Hide()
+			self:SetAlpha(1)
 		end
-	else
-		self.searchOverlay:Hide()
-		self:SetAlpha(1)
 	end
 	
 	addon:SendMessage('AdiBags_UpdateButton', self)
