@@ -93,6 +93,14 @@ function buttonProto:OnCreate()
 		scrapIcon:Hide()
 		self.ScrapIcon = scrapIcon
 	end
+	if not self.Azerite then
+		local azerite = self:CreateTexture(nil, "ARTWORK")
+		azerite:SetAtlas("AzeriteIconFrame")
+		azerite:SetTexCoord(0, 1, 0, 1)
+		azerite:SetInside()
+		azerite:Hide()
+		self.Azerite = azerite
+	end
 	if self.NewItemTexture then
 		self.NewItemTexture:Hide()
 	end
@@ -331,6 +339,7 @@ function buttonProto:Update()
 	self:UpdateNew()
 	self:UpdateUpgradeIcon()
 	self:UpdateScrapIcon()
+	self:UpdateAzerite()
 	self:UpdateKlixStyling()
 	if self.UpdateSearch then
 		self:UpdateSearch()
@@ -403,6 +412,15 @@ function buttonProto:UpdateScrapIcon()
 	if itemLocation then
 		self.ScrapIcon:SetShown(addon.db.profile.scrapIndicator and C_Item_DoesItemExist(itemLocation) and C_Item_CanScrapItem(itemLocation) or false)
 	end	
+end
+
+function buttonProto:UpdateAzerite()
+	local link = GetContainerItemLink(self.bag, self.slot)
+	if link then
+		self.Azerite:SetShown(C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(link))
+	else
+		self.Azerite:Hide()
+	end
 end
 
 function buttonProto:UpdateKlixStyling()
