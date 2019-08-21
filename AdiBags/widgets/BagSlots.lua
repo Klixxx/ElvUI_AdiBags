@@ -478,7 +478,7 @@ function addon:CreateBagSlotPanel(container, name, bags, isBank)
 			button.icon:SetTexCoord(unpack(ElvUI[1].TexCoords))
 			button.icon:SetInside()
 			if ElvUI_KlixUI then
-				ElvUI_KlixUI[1]:GetModule("KuiButtonStyle"):StyleButton(button)
+				button:CreateIconShadow()
 			end
 			x = x + ITEM_SIZE + ITEM_SPACING
 			tinsert(self.buttons, button)

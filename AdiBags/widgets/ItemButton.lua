@@ -85,6 +85,9 @@ function buttonProto:OnCreate()
 	self:SetTemplate(nil, true)
 	self:StyleButton()
 	self:SetNormalTexture(nil)
+	if ElvUI_KlixUI then
+		self:CreateIconShadow()
+	end
 	if not self.ScrapIcon then
 		local scrapIcon = self:CreateTexture(nil, "OVERLAY")
 		scrapIcon:SetAtlas("bags-icon-scrappable")
@@ -340,7 +343,6 @@ function buttonProto:Update()
 	self:UpdateUpgradeIcon()
 	self:UpdateScrapIcon()
 	self:UpdateAzerite()
-	self:UpdateKlixStyling()
 	if self.UpdateSearch then
 		self:UpdateSearch()
 	end
@@ -422,12 +424,6 @@ function buttonProto:UpdateAzerite()
 		self.Azerite:SetShown(C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(link))
 	else
 		self.Azerite:Hide()
-	end
-end
-
-function buttonProto:UpdateKlixStyling()
-	if ElvUI_KlixUI then
-		ElvUI_KlixUI[1]:GetModule("KuiButtonStyle"):StyleButton(self)
 	end
 end
 
