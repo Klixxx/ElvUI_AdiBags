@@ -181,8 +181,10 @@ function containerProto:OnCreate(name, isBank, bagObject)
 	bagSlotButton:GetCheckedTexture():SetInside(bagSlotButton.backdrop, 0, 0)
 	ElvUI[1]:GetModule("Skins"):HandleIcon(bagSlotButton:GetNormalTexture(), true)
 	if ElvUI_KlixUI then
-		bagSlotButton:CreateIconShadow()
-		bagSlotButton.ishadow:SetInside(bagSlotButton, 0, 0)
+		if ElvUI[1].db.KlixUI.general.iconStyle then
+			bagSlotButton:CreateIconShadow()
+			bagSlotButton.ishadow:SetInside(bagSlotButton, 0, 0)
+		end
 	end
 	bagSlotButton:SetScript('OnClick', BagSlotButton_OnClick)
 	bagSlotButton.panel = bagSlotPanel
