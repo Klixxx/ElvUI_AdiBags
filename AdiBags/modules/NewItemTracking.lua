@@ -118,6 +118,7 @@ function mod:UpdateButton(event, button)
 	self:ShowLegacyGlow(button, isNew and mod.db.profile.highlight == "legacy")
 	self:ShowBlizzardGlow(button, isNew and mod.db.profile.highlight == "blizzard")
 	self:ShowPixelGlow(button, isNew and mod.db.profile.highlight == "pixel")
+	self:ShowParticleGlow(button, isNew and mod.db.profile.highlight == "particle")
 	self:UpdateModuleButton()
 end
 
@@ -174,7 +175,8 @@ function mod:GetOptions()
 				none = L["None"],
 				legacy = L["Legacy"],
 				blizzard = L["6.0"],
-				pixel = L["Pixel"]
+				pixel = L["Pixel"],
+				particle = L["Particle"]
 			}
 		},
 		glowScale = {
@@ -186,12 +188,18 @@ function mod:GetOptions()
 			isPercent = true,
 			bigStep = 0.05,
 			order = 20,
+			disabled = function()
+				return mod.db.profile.highlight == "none" or mod.db.profile.highlight == "blizzard" or mod.db.profile.highlight == "pixel" 
+			end,
 		},
 		glowColor = {
 			name = L['Highlight color'],
 			type = 'color',
 			order = 30,
 			hasAlpha = true,
+			disabled = function()
+				return mod.db.profile.highlight == "none" or  mod.db.profile.highlight == "blizzard"
+			end,
 		},
 		ignoreJunk = {
 			name = L['Ignore low quality items'],
@@ -203,6 +211,7 @@ function mod:GetOptions()
 				self:SendMessage('AdiBags_UpdateAllButtons', true)
 			end,
 			width = 'double',
+			disabled = function() return mod.db.profile.highlight == "none" end,
 		},
 	}, addon:GetOptionHandler(self)
 end
@@ -297,5 +306,17 @@ function mod:ShowPixelGlow(button, enable)
 		LCG.PixelGlow_Start(button, mod.db.profile.glowColor, nil, -0.25, nil, 2, 1, 0)
 	else
 		LCG.PixelGlow_Stop(button)
+	end
+end
+
+--------------------------------------------------------------------------------
+-- Particle glow
+--------------------------------------------------------------------------------
+
+function mod:ShowParticleGlow(button, enable)
+	if enable then
+		LCG.AutoCastGlow_Start(button, mod.db.profile.glowColor, 6, -0.25, mod.db.profile.glowScale)
+	else
+		LCG.AutoCastGlow_Stop(button)
 	end
 end
