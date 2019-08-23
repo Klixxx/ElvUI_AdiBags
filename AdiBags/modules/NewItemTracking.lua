@@ -50,7 +50,7 @@ local newItems = {}
 function mod:OnInitialize()
 	self.db = addon.db:RegisterNamespace(self.moduleName, {
 		profile = {
-			highlight = "pixel",
+			highlight = "particle",
 			glowScale = 1.5,
 			glowColor = { 0.3, 1, 0.3, 0.7 },
 			ignoreJunk = false,
