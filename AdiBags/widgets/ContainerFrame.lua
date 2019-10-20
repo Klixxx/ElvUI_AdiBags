@@ -172,14 +172,26 @@ function containerProto:OnCreate(name, isBank, bagObject)
 	closeButton:SetPoint("TOPRIGHT", -2, -2)
 	addon.SetupTooltip(closeButton, L["Close"])
 	closeButton:SetFrameLevel(frameLevel)
-	ElvUI[1]:GetModule("Skins"):HandleCloseButton(self.CloseButton) -- ElvUI Mod!
+	if ElvUI then
+		ElvUI[1]:GetModule("Skins"):HandleCloseButton(self.CloseButton) -- ElvUI Mod!
+	elseif KlixUI then
+		KlixUI[1]:GetModule("Skins"):ReskinClose(self.CloseButton) -- ElvUI Mod!
+	end
 
 	local bagSlotButton = CreateFrame("CheckButton", nil, self)
 	bagSlotButton:SetNormalTexture([[Interface\Buttons\Button-Backpack-Up]])
-	bagSlotButton:SetCheckedTexture(ElvUI[1].media.normTex)
+	if ElvUI then
+		bagSlotButton:SetCheckedTexture(ElvUI[1].media.normTex)
+	elseif KlixUI then
+		bagSlotButton:SetCheckedTexture(KlixUI[1].media.normal)
+	end
 	bagSlotButton:GetCheckedTexture():SetVertexColor(1, .82, 0, 0.5)
 	bagSlotButton:GetCheckedTexture():SetInside(bagSlotButton.backdrop, 0, 0)
-	ElvUI[1]:GetModule("Skins"):HandleIcon(bagSlotButton:GetNormalTexture(), true)
+	if ElvUI then
+		ElvUI[1]:GetModule("Skins"):HandleIcon(bagSlotButton:GetNormalTexture(), true)
+	elseif KlixUI then
+		KlixUI[1]:GetModule("Skins"):ReskinIcon(bagSlotButton:GetNormalTexture(), true)
+	end
 	if ElvUI_KlixUI then
 		bagSlotButton:CreateIconShadow()
 		if ElvUI[1].db.KlixUI.general.iconShadow and not IsAddOnLoaded("Masque") then
@@ -198,11 +210,23 @@ function containerProto:OnCreate(name, isBank, bagObject)
 	headerLeftRegion:AddWidget(bagSlotButton, 50)
 
 	local searchBox = CreateFrame("EditBox", self:GetName().."SearchBox", self, "BagSearchBoxTemplate")
-	searchBox:SetSize(130, 18)
+	if ElvUI then
+		searchBox:SetSize(130, 18)
+	elseif KlixUI then
+		searchBox:SetSize(130, 20)
+	end
 	searchBox:SetFrameLevel(frameLevel)
-	headerRightRegion:AddWidget(searchBox, -10, 130, 0, -1)
+	if ElvUI then
+		headerRightRegion:AddWidget(searchBox, -10, 130, 0, -1)
+	elseif KlixUI then
+		headerRightRegion:AddWidget(searchBox, -10, 130, 0, 0)
+	end
 	tinsert(_G.ITEM_SEARCHBAR_LIST, searchBox:GetName())
-	ElvUI[1]:GetModule("Skins"):HandleEditBox(searchBox) -- ElvUI Mod!
+	if ElvUI then
+		ElvUI[1]:GetModule("Skins"):HandleEditBox(searchBox) -- ElvUI Mod!
+	elseif KlixUI then
+		KlixUI[1]:GetModule("Skins"):ReskinInput(searchBox) -- ElvUI Mod!
+	end
 
 	local title = self:CreateFontString(self:GetName().."Title","OVERLAY")
 	self.Title = title
@@ -284,7 +308,11 @@ function containerProto:CreateModuleButton(letter, order, onClick, tooltip)
 	button.text:SetText(letter)]]
 	button:SetScript("OnClick", onClick)
 	button:RegisterForClicks("AnyUp")
-	ElvUI[1]:GetModule("Skins"):HandleButton(button)
+	if ElvUI then
+		ElvUI[1]:GetModule("Skins"):HandleButton(button)
+	elseif KlixUI then
+		KlixUI[1]:GetModule("Skins"):Reskin(button)
+	end
 	if order then
 		self:AddHeaderWidget(button, order)
 	end
@@ -604,7 +632,11 @@ function containerProto:UpdateSkin()
 	
 	-- ElvUI Mod!
 	self:StripTextures()
-	self:SetTemplate("Transparent")
+	if ElvUI then
+		self:SetTemplate("Transparent")
+	elseif KlixUI then
+		KlixUI[1]:GetModule("Skins"):CreateKlixStyle(self)
+	end
 	if ElvUI_KlixUI or ElvUI_MerathilisUI then
 		self:Styling()
 	end

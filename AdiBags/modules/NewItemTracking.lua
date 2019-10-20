@@ -229,7 +229,11 @@ function mod:ShowBlizzardGlow(button, enable)
 			button.NewItemTexture:SetAtlas("bags-glow-white")
 		end
 		button.NewItemTexture:Show()
-		button.NewItemTexture:SetTexCoord(unpack(ElvUI[1].TexCoords))
+		if ElvUI then
+			button.NewItemTexture:SetTexCoord(unpack(ElvUI[1].TexCoords))
+		elseif KlixUI then
+			button.NewItemTexture:SetTexCoord(unpack(KlixUI[1].TexCoords))
+		end
 		if not button.flashAnim:IsPlaying() and not button.newitemglowAnim:IsPlaying() then
 			button.flashAnim:Play()
 			button.newitemglowAnim:Play()
