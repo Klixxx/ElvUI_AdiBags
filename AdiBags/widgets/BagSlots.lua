@@ -427,11 +427,7 @@ local function Panel_UpdateSkin(self)
 	end
 
 	self:StripTextures()
-	if ElvUI then
-		self:SetTemplate("Transparent")
-	elseif KlixUI then
-		KlixUI[1]:GetModule("Skins"):CreateKlixStyle(self)
-	end
+	self:SetTemplate("Transparent")
 	if ElvUI_KlixUI or ElvUI_MerathilisUI then
 		self:Styling()
 	end
@@ -452,11 +448,7 @@ end
 
 function addon:CreateBagSlotPanel(container, name, bags, isBank)
 	local self = CreateFrame("Frame", container:GetName().."Bags", container)
-	if ElvUI then
-		self:SetPoint("BOTTOMLEFT", container, "TOPLEFT", 0, 4)
-	elseif KlixUI then
-		self:SetPoint("BOTTOMLEFT", container, "TOPLEFT", 0, 7)
-	end
+	self:SetPoint("BOTTOMLEFT", container, "TOPLEFT", 0, 4)
 
 	self.openSound = isBank and SOUNDKIT.IG_MAINMENU_OPEN or SOUNDKIT.IG_BACKPACK_OPEN
 	self.closeSound = isBank and SOUNDKIT.IG_MAINMENU_CLOSE or SOUNDKIT.IG_BACKPACK_CLOSE
@@ -483,11 +475,7 @@ function addon:CreateBagSlotPanel(container, name, bags, isBank)
 			button:SetTemplate(nil, true)
 			button:StyleButton()
 			button:SetNormalTexture(nil)
-			if ElvUI then
-				button.icon:SetTexCoord(unpack(ElvUI[1].TexCoords))
-			elseif KlixUI then
-				button.icon:SetTexCoord(unpack(KlixUI[1].TexCoords))
-			end
+			button.icon:SetTexCoord(unpack(ElvUI[1].TexCoords))
 			button.icon:SetInside()
 			if ElvUI_KlixUI then
 				button:CreateIconShadow()
