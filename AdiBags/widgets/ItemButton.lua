@@ -82,7 +82,11 @@ function buttonProto:OnCreate()
 	self:SetScript('OnHide', self.OnHide)
 	self:SetWidth(ITEM_SIZE)
 	self:SetHeight(ITEM_SIZE)
-	self:SetTemplate(nil, true)
+	if ElvUI then
+		self:SetTemplate(nil, true)
+	elseif KlixUI then
+		self:SetTemplate("Transparent")
+	end
 	self:StyleButton()
 	self:SetNormalTexture(nil)
 	if not self.ScrapIcon then
@@ -318,11 +322,19 @@ function buttonProto:Update()
 	local icon = self.IconTexture
 	if self.texture then
 		icon:SetTexture(self.texture)
-		icon:SetTexCoord(unpack(ElvUI[1].TexCoords))
+		if ElvUI then
+			icon:SetTexCoord(unpack(ElvUI[1].TexCoords))
+		elseif KlixUI then
+			icon:SetTexCoord(unpack(KlixUI[1].TexCoords))
+		end
 		icon:SetInside()
 	else
 		icon:SetTexture()
-		icon:SetTexCoord(unpack(ElvUI[1].TexCoords))
+		if ElvUI then
+			icon:SetTexCoord(unpack(ElvUI[1].TexCoords))
+		elseif KlixUI then
+			icon:SetTexCoord(unpack(KlixUI[1].TexCoords))
+		end
 		icon:SetInside()
 	end
 	local tag = (not self.itemId or addon.db.profile.showBagType) and addon:GetFamilyTag(self.bagFamily)
@@ -397,7 +409,9 @@ function buttonProto:UpdateSearch()
 end
 
 function buttonProto:UpdateCooldown()
-	ElvUI[1]:RegisterCooldown(self.Cooldown)
+	if ElvUI then
+		ElvUI[1]:RegisterCooldown(self.Cooldown)
+	end
 	return ContainerFrame_UpdateCooldown(self.bag, self)
 end
 
@@ -456,7 +470,11 @@ local function GetBorder(bag, slot, settings)
 end
 
 function buttonProto:UpdateBorder(isolatedEvent)
-	self:SetBackdropBorderColor(unpack(ElvUI[1].media.bordercolor))
+	if ElvUI then
+		self:SetBackdropBorderColor(unpack(ElvUI[1].media.bordercolor))
+	elseif KlixUI then
+		self:SetBackdropBorderColor(unpack(KlixUI[1].media.bordercolor))
+	end
 	local texture, r, g, b, a, blendMode
 	if self.hasItem then
 		texture, r, g, b, a, blendMode = GetBorder(self.bag, self.slot, addon.db.profile)

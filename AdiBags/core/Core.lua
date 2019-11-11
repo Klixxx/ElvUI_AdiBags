@@ -331,7 +331,11 @@ do
 	button:SetText(L['Configure'])
 	button:SetWidth(128)
 	button:SetPoint("TOPLEFT", 10, -68)
-	ElvUI[1]:GetModule("Skins"):HandleButton(button) -- ElvUI Mod!
+	if ElvUI then
+		ElvUI[1]:GetModule("Skins"):HandleButton(button) -- ElvUI Mod!
+	elseif KlixUI then
+		KlixUI[1]:GetModule("Skins"):Reskin(button)
+	end
 	button:SetScript('OnClick', function()
 		while CloseWindows() do end
 		return addon:OpenOptions()
