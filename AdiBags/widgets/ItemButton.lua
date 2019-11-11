@@ -84,11 +84,10 @@ function buttonProto:OnCreate()
 	self:SetHeight(ITEM_SIZE)
 	if ElvUI then
 		self:SetTemplate(nil, true)
-		self:StyleButton()
 	elseif KlixUI then
 		self:SetTemplate("Transparent")
-		self:StyleButton(1)
 	end
+	self:StyleButton()
 	self:SetNormalTexture(nil)
 	if not self.ScrapIcon then
 		local scrapIcon = self:CreateTexture(nil, "OVERLAY")
@@ -325,20 +324,18 @@ function buttonProto:Update()
 		icon:SetTexture(self.texture)
 		if ElvUI then
 			icon:SetTexCoord(unpack(ElvUI[1].TexCoords))
-			icon:SetInside()
 		elseif KlixUI then
 			icon:SetTexCoord(unpack(KlixUI[1].TexCoords))
-			icon:SetInside(nil, 1, 1)
 		end
+		icon:SetInside()
 	else
 		icon:SetTexture()
 		if ElvUI then
 			icon:SetTexCoord(unpack(ElvUI[1].TexCoords))
-			icon:SetInside()
 		elseif KlixUI then
 			icon:SetTexCoord(unpack(KlixUI[1].TexCoords))
-			icon:SetInside(nil, 1, 1)
 		end
+		icon:SetInside()
 	end
 	local tag = (not self.itemId or addon.db.profile.showBagType) and addon:GetFamilyTag(self.bagFamily)
 	if tag then
