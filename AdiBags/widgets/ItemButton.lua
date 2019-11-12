@@ -106,6 +106,18 @@ function buttonProto:OnCreate()
 		azerite:Hide()
 		self.Azerite = azerite
 	end
+	if not self.QuestIcon then
+		questIcon = self:CreateFontString(nil, "OVERLAY")
+		questIcon:SetPoint("LEFT", 3, 0)
+		if ElvUI then
+			questIcon:SetFont(ElvUI[1].media.normFont, 30, "OUTLINE")
+		elseif KlixUI then
+			questIcon:SetFont(KlixUI[1].media.font, 30, "OUTLINE")
+		end
+		questIcon:SetTextColor(1, 1, 0)
+		questIcon:SetText("!")
+		self.QuestIcon = questIcon
+	end
 	if self.NewItemTexture then
 		self.NewItemTexture:Hide()
 	end
@@ -355,6 +367,7 @@ function buttonProto:Update()
 	self:UpdateUpgradeIcon()
 	self:UpdateScrapIcon()
 	self:UpdateAzerite()
+	--self:UpdateQuestIcon()
 	self:UpdateKlixStyling()
 	if self.UpdateSearch then
 		self:UpdateSearch()
@@ -442,6 +455,15 @@ function buttonProto:UpdateAzerite()
 	end
 end
 
+function buttonProto:UpdateQuestIcon()
+	local isQuestItem, questId, isActive = GetContainerItemQuestInfo(self.bag, self.slot)
+	if questId and not isActive then
+		self.QuestIcon:SetAlpha(1)
+	else
+		self.QuestIcon:SetAlpha(0)
+	end
+end
+
 function buttonProto:UpdateKlixStyling()
 	if ElvUI_KlixUI then
 		self:CreateIconShadow()
@@ -452,7 +474,8 @@ local function GetBorder(bag, slot, settings)
 	if settings.questIndicator then
 		local isQuestItem, questId, isActive = GetContainerItemQuestInfo(bag, slot)
 		if questId and not isActive then
-			return TEXTURE_ITEM_QUEST_BANG, 1, 1, 0, settings.qualityOpacity
+			--return TEXTURE_ITEM_QUEST_BANG, 1, 1, 0, settings.qualityOpacity
+			return nil, 1, 1, 0, settings.qualityOpacity
 		end
 		if questId or isQuestItem then
 			return nil, 1, 0.3, 0.3, settings.qualityOpacity
@@ -488,9 +511,9 @@ function buttonProto:UpdateBorder(isolatedEvent)
 	else
 		if texture == true then
 			border:SetColorTexture(r, g, b, a)
-		elseif texture == TEXTURE_ITEM_QUEST_BANG then
-			border:SetTexture(texture)
-			self:SetBackdropBorderColor(r, g, b, a)
+		--elseif texture == TEXTURE_ITEM_QUEST_BANG then
+			--border:SetTexture(texture)
+			--self:SetBackdropBorderColor(r, g, b, a)
 		else
 			border:SetTexture()
 			self:SetBackdropBorderColor(r, g, b, a)
@@ -500,6 +523,9 @@ function buttonProto:UpdateBorder(isolatedEvent)
 		border:SetBlendMode(blendMode or "BLEND")
 		border:Show()
 	end
+	
+	self:UpdateQuestIcon() -- place this here, else the questicon wont live update!
+	
 	if self.JunkIcon then
 		local quality = self.hasItem and select(3, GetItemInfo(self.itemLink or self.itemId))
 		self.JunkIcon:SetShown(quality == LE_ITEM_QUALITY_POOR and addon:GetInteractingWindow() == "MERCHANT")
