@@ -1,4 +1,4 @@
-## Interface: 80200
+## Interface: 80205
 
 ## Title: AdiBags Configuration
 ## Notes: Adirelle's bag addon. (For |cfffe7b2cElvUI|r by |cfff960d9Klix|r-Twisiting Nether)
