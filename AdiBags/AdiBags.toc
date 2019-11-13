@@ -32,6 +32,8 @@
 # ## OptionalDeps: AdiDebug, BugSack, Swatter
 #@end-alpha@
 
+Loading.lua
+
 #@no-lib-strip@
 libs\LibStub\LibStub.lua
 libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
