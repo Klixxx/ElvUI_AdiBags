@@ -17,12 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with AdiBags.  If not, see <http://www.gnu.org/licenses/>.
 
-## Interface: 80200
+## Interface: 80300
 
 ## Title: AdiBags
 ## Notes: Adirelle's bag addon. (For |cfffe7b2cElvUI|r by |cfff960d9Klix|r-Twisiting Nether)
 ## Author: Adirelle, Klix
-## Version: v1.9.17 build 0.11
+## Version: v1.9.18 build 0.12
 ## SavedVariables: AdiBagsDB
 ## X-Date: 2019-07-09T18:22:10Z
 ## X-License: GPL v3
