@@ -38,7 +38,7 @@ local GetContainerNumFreeSlots = _G.GetContainerNumFreeSlots
 local GetItemInfo = _G.GetItemInfo
 local hooksecurefunc = _G.hooksecurefunc
 local IsBattlePayItem = _G.IsBattlePayItem
-local IsContainerItemAnUpgrade = _G.IsContainerItemAnUpgrade
+--local IsContainerItemAnUpgrade = _G.IsContainerItemAnUpgrade
 local IsInventoryItemLocked = _G.IsInventoryItemLocked
 local LE_ITEM_QUALITY_POOR = _G.LE_ITEM_QUALITY_POOR
 local LE_ITEM_QUALITY_COMMON = _G.LE_ITEM_QUALITY_COMMON
@@ -106,8 +106,15 @@ function buttonProto:OnCreate()
 		azerite:Hide()
 		self.Azerite = azerite
 	end
+	if not self.Corruption then
+		local corruption = self:CreateTexture(nil, "ARTWORK")
+		corruption:SetAtlas("Nzoth-inventory-icon")
+		corruption:SetInside()
+		corruption:Hide()
+		self.Corruption = corruption
+	end
 	if not self.QuestIcon then
-		questIcon = self:CreateFontString(nil, "OVERLAY")
+		local questIcon = self:CreateFontString(nil, "OVERLAY")
 		questIcon:SetPoint("LEFT", 3, 0)
 		if ElvUI then
 			questIcon:SetFont(ElvUI[1].media.normFont, 30, "OUTLINE")
@@ -367,6 +374,7 @@ function buttonProto:Update()
 	self:UpdateUpgradeIcon()
 	self:UpdateScrapIcon()
 	self:UpdateAzerite()
+	self:UpdateCorruption()
 	--self:UpdateQuestIcon()
 	self:UpdateKlixStyling()
 	if self.UpdateSearch then
@@ -453,6 +461,11 @@ function buttonProto:UpdateAzerite()
 	else
 		self.Azerite:Hide()
 	end
+end
+
+function buttonProto:UpdateCorruption()
+	local link = GetContainerItemLink(self.bag, self.slot)
+	self.Corruption:SetShown(link and IsCorruptedItem(link))
 end
 
 function buttonProto:UpdateQuestIcon()
