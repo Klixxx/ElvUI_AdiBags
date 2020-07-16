@@ -245,6 +245,8 @@ function containerProto:OnCreate(name, isBank, bagObject)
 	if self.isBank then
 		self:CreateReagentTabButton()
 		self:CreateDepositButton()
+	else
+		self:CreateConfigButton()
 	end
 	self:CreateSortButton()
 
@@ -380,7 +382,7 @@ function containerProto:CreateSortButton()
 		10,
 		function()
 			addon:CloseAllBags()
-			self.bagObject:Sort()
+			self.bagObject:Sort(self.isReagentBank)
 			self.forceLayout = true
 		end,
 		L["(Blizzard's) Sort items"]
@@ -414,6 +416,18 @@ function containerProto:CreateReagentTabButton()
 				)
 			)
 		end
+	)
+end
+
+function containerProto:CreateConfigButton()
+	local button
+	button = self:CreateModuleButton(
+		"C",
+		11,
+		function()
+			addon:OpenOptions('bags')
+		end,
+		L["Open Config"]
 	)
 end
 
