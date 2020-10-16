@@ -27,10 +27,10 @@ local _G = _G
 local BreakUpLargeNumbers = _G.BreakUpLargeNumbers
 local CreateFont = _G.CreateFont
 local CreateFrame = _G.CreateFrame
-local ExpandCurrencyList = _G.ExpandCurrencyList
+local ExpandCurrencyList = C_CurrencyInfo.ExpandCurrencyList
 local format = _G.format
-local GetCurrencyListInfo = _G.GetCurrencyListInfo
-local GetCurrencyListSize = _G.GetCurrencyListSize
+local GetCurrencyListInfo = C_CurrencyInfo.GetCurrencyListInfo
+local GetCurrencyListSize = C_CurrencyInfo.GetCurrencyListSize
 local hooksecurefunc = _G.hooksecurefunc
 local ipairs = _G.ipairs
 local IsAddOnLoaded = _G.IsAddOnLoaded
@@ -99,7 +99,8 @@ function mod:OnBagFrameCreated(bag)
 	if bag.bagName ~= "Backpack" then return end
 	local frame = bag:GetFrame()
 
-	local widget = CreateFrame("Button", addonName.."CurrencyFrame", frame)
+	-- Added 'BackDropTemplate' in every create frame due to api change 9.0
+	local widget = CreateFrame("Button", addonName.."CurrencyFrame", frame, 'BackDropTemplate')
 	self.widget = widget
 	widget:SetHeight(16)
 	widget:RegisterForClicks("RightButtonUp")
@@ -118,21 +119,25 @@ end
 local IterateCurrencies
 do
 	local function iterator(collapse, index)
+		local CurrencyListSize = GetCurrencyListSize()
+		if CurrencyListSize == 0 then return end
+		CurrencyListSize = CurrencyListSize - 2
 		if not index then return end
 		repeat
 			index = index + 1
-			local name, isHeader, isExpanded, isUnused, isWatched, count, icon = GetCurrencyListInfo(index)
-			if name then
-				if isHeader then
-					if not isExpanded then
+			-- debbugging currency due to blizzard changing the GetCurrency function return
+			CurrencyListInfo = GetCurrencyListInfo(index)
+			if CurrencyListInfo.name then
+				if CurrencyListInfo.isHeader then
+					if not CurrencyListInfo.isHeaderExpanded then
 						tinsert(collapse, 1, index)
 						ExpandCurrencyList(index, 1)
 					end
 				else
-					return index, name, isHeader, isExpanded, isUnused, isWatched, count, icon
+					return index, CurrencyListInfo
 				end
 			end
-		until index > GetCurrencyListSize()
+		until index >= CurrencyListSize
 		for i, index in ipairs(collapse) do
 			ExpandCurrencyList(index, 0)
 		end
@@ -154,10 +159,16 @@ function mod:Update()
 	updating = true
 
 	local shown, hideZeroes = self.db.profile.shown, self.db.profile.hideZeroes
-	for i, name, _, _, _, _, count, icon in IterateCurrencies() do
-		if shown[name] and (count > 0 or not hideZeroes) then
-			tinsert(values, BreakUpLargeNumbers(count))
-			tinsert(values, format(ICON_STRING, icon))
+	-- Dirty avoid dooblons when showing isShowInBackpack money
+	for i, CurrencyInfo in IterateCurrencies() do
+		if CurrencyInfo.isShowInBackpack and (CurrencyInfo.quantity > 0 or not hideZeroes) then
+			tinsert(values, BreakUpLargeNumbers(CurrencyInfo.quantity))
+			tinsert(values, format(ICON_STRING, CurrencyInfo.iconFileID))
+			CurrencyInfo.CurrencyShown = true
+		end
+		if shown[CurrencyInfo.name] and (CurrencyInfo.quantity > 0 or not hideZeroes) and not CurrencyInfo.CurrencyShown then
+			tinsert(values, BreakUpLargeNumbers(CurrencyInfo.quantity))
+			tinsert(values, format(ICON_STRING, CurrencyInfo.iconFileID))
 		end
 	end
 
@@ -177,6 +188,8 @@ function mod:Update()
 	updating = false
 end
 
+
+-- TODO: Use the flag isShowInBackpack from C_CurrencyInfo.GetCurrencyInfo to configure curency
 function mod:GetOptions()
 	local values = {}
 	return {
@@ -186,8 +199,8 @@ function mod:GetOptions()
 			order = 10,
 			values = function()
 				wipe(values)
-				for i, name, _, _, _, _, _, icon in IterateCurrencies() do
-					values[name] = format(ICON_STRING, icon)..name
+				for i, CurrencyInfo in IterateCurrencies() do
+					values[CurrencyInfo.name] = format(ICON_STRING, CurrencyInfo.iconFileID)..CurrencyInfo.name
 				end
 				return values
 			end,
