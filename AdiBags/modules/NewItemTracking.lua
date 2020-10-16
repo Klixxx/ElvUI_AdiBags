@@ -39,6 +39,7 @@ local tonumber = _G.tonumber
 local type = _G.type
 local unpack = _G.unpack
 local wipe = _G.wipe
+local LE_ITEM_QUALITY_POOR = Enum.ItemQuality.Poor
 --GLOBALS>
 
 local mod = addon:RegisterFilter('NewItem', 80, 'ABEvent-1.0')
@@ -259,7 +260,8 @@ local function Glow_Update(glow)
 end
 
 local function CreateGlow(button)
-	local glow = CreateFrame("FRAME", nil, button)
+	-- Added 'BackDropTemplate' in every create frame due to api change 9.0
+	local glow = CreateFrame("FRAME", nil, button, 'BackDropTemplate')
 	glow:SetFrameLevel(button:GetFrameLevel()+15)
 	glow:SetPoint("CENTER")
 	glow:SetWidth(addon.ITEM_SIZE)
