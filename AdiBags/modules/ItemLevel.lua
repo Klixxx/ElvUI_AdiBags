@@ -34,6 +34,8 @@ local min = _G.min
 local pairs = _G.pairs
 local select = _G.select
 local unpack = _G.unpack
+local LE_ITEM_QUALITY_POOR = Enum.ItemQuality.Poor
+local LE_ITEM_QUALITY_HEIRLOOM = Enum.ItemQuality.Heirloom
 --GLOBALS>
 
 local mod = addon:NewModule('ItemLevel', 'ABEvent-1.0')
@@ -227,7 +229,7 @@ do
 		{ 372, 0.00, 1.00, 0.00 }, -- green
 		{ 385, 0.00, 1.00, 1.00 }, -- cyan
 		{ 397, 0.00, 0.80, 1.00 }, -- blue
-		{ 403, 1.00, 0.50, 1.00 }, -- purple,
+		{ 403, 1.00, 0.50, 1.00 }, -- purple
 		{ 410, 1.00, 0.75, 1.00 }, -- pink
 		{ 999, 1.00, 1.00, 1.00 }, -- white
 	}
@@ -329,7 +331,9 @@ do
 		end
 	end
 
+-- TODO: Change the item-level system for shadowlands
 	local maxLevelRanges = {
+--[[
 		[ 60] = {  58,  65 }, -- Classic
 		[ 70] = {  80,  94 }, -- The Burning Crusade
 		[ 80] = { 100, 102 }, -- Wrath of the Lich King
@@ -338,8 +342,15 @@ do
 		[100] = { 136, 143 }, -- Warlords of Draenor
 		[110] = { 164, 250 }, -- Legion
 		[120] = { 400, 485 }, -- Battle for Azeroth
+]]--
+		[10] = { 1, 14 }, -- Leveling
+		[20] = { 15, 29 }, -- Leveling
+		[30] = { 30, 44 }, -- Leveling
+		[40] = { 45, 59 }, -- Leveling
+		[50] = { 60, 168 }, -- Battle for Azeroth
+		[60] = { 169, 300 }, -- Shadowlands
 	}
-
+	
 	local maxLevelColors = {}
 	do
 		local t = maxLevelColors
