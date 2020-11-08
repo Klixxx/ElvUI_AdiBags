@@ -60,8 +60,7 @@ function anchorProto:OnCreate(parent, name, label, target)
 	self:SetScript('OnMouseUp', self.StopMoving)
 	self:SetScript('OnHide', self.StopMoving)
 
-	-- Added 'BackDropTemplate' in every create frame due to api change 9.0
-	local corner = CreateFrame("Frame", nil, self, 'BackDropTemplate')
+	local corner = CreateFrame("Frame", nil, self)
 	corner:SetFrameStrata("TOOLTIP")
 	corner:SetBackdrop({ bgFile = [[Interface\Buttons\WHITE8X8]], tile = true, tileSize = 8 })
 	corner:SetBackdropColor(1, 1, 0.5, 0.8)

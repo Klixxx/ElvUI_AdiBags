@@ -115,8 +115,7 @@ end
 
 function Button_OnClick(button)
 	if not frame then
-		-- Added 'BackDropTemplate' in every create frame due to api change 9.0
-		frame = CreateFrame("Frame", addonName.."CollapseDropDownMenu", nil, 'BackDropTemplate')
+		frame = CreateFrame("Frame", addonName.."CollapseDropDownMenu")
 		frame.displayMode = "MENU"
 		frame.initialize = CollapseDropDownMenu_Initialize
 		frame.point = "BOTTOMRIGHT"

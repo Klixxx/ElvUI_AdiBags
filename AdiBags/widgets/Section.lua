@@ -90,8 +90,7 @@ function sectionProto:OnCreate()
 	self.slots = {}
 	self.freeSlots = {}
 
-	-- Added 'BackDropTemplate' in every create frame due to api change 9.0
-	local header = CreateFrame("Button", nil, self, 'BackDropTemplate')
+	local header = CreateFrame("Button", nil, self)
 	header.section = self
 	header:SetNormalFontObject(addon.sectionFont)
 	header:SetPoint("TOPLEFT", 0, 0)

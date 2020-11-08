@@ -124,16 +124,14 @@ function containerProto:OnCreate(name, isBank, bagObject)
 		self.content[bagId] = { size = 0 }
 		tinsert(bagSlots, bagId)
 		if not addon.itemParentFrames[bagId] then
-			-- Added 'BackDropTemplate' in every create frame due to api change 9.0
-			local f = CreateFrame("Frame", addonName..'ItemContainer'..bagId, self, 'BackDropTemplate')
+			local f = CreateFrame("Frame", addonName..'ItemContainer'..bagId, self)
 			f.isBank = isBank
 			f:SetID(bagId)
 			addon.itemParentFrames[bagId] = f
 		end
 	end
 
-	-- Added 'BackDropTemplate' in every create frame due to api change 9.0
-	local button = CreateFrame("Button", nil, self, 'BackDropTemplate')
+	local button = CreateFrame("Button", nil, self)
 	button:SetAllPoints(self)
 	button:RegisterForClicks("AnyUp")
 	button:SetScript('OnClick', function(_, ...) return self:OnClick(...) end)
@@ -180,8 +178,7 @@ function containerProto:OnCreate(name, isBank, bagObject)
 		KlixUI[1]:GetModule("Skins"):ReskinClose(self.CloseButton) -- ElvUI Mod!
 	end
 
-	-- Added 'BackDropTemplate' in every create frame due to api change 9.0
-	local bagSlotButton = CreateFrame("CheckButton", nil, self, 'BackDropTemplate')
+	local bagSlotButton = CreateFrame("CheckButton", nil, self)
 	bagSlotButton:SetNormalTexture([[Interface\Buttons\Button-Backpack-Up]])
 	if ElvUI then
 		bagSlotButton:SetCheckedTexture(ElvUI[1].media.normTex)
@@ -269,8 +266,7 @@ function containerProto:OnCreate(name, isBank, bagObject)
 	toSortSection.Header:RegisterForClicks("AnyUp")
 	toSortSection.Header:SetScript("OnClick", function() self:FullUpdate() end)
 
-	-- Added 'BackDropTemplate' in every create frame due to api change 9.0
-	local content = CreateFrame("Frame", nil, self, 'BackDropTemplate')
+	local content = CreateFrame("Frame", nil, self)
 	content:SetPoint("TOPLEFT", toSortSection, "BOTTOMLEFT", 0, -ITEM_SPACING)
 	self.Content = content
 	self:AddWidget(content)
