@@ -451,7 +451,7 @@ end
 --------------------------------------------------------------------------------
 
 function addon:CreateBagSlotPanel(container, name, bags, isBank)
-	local self = CreateFrame("Frame", container:GetName().."Bags", container)
+	local self = CreateFrame("Frame", container:GetName().."Bags", container, "BackdropTemplate")
 	if ElvUI then
 		self:SetPoint("BOTTOMLEFT", container, "TOPLEFT", 0, 4)
 	elseif KlixUI then
