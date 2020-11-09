@@ -86,8 +86,7 @@ local BAG_IDS = addon.BAG_IDS
 
 local EmptyBag
 do
-	-- Added 'BackDropTemplate' in every create frame due to api change 9.0
-	local swapFrame = CreateFrame("Frame", nil, nil, 'BackDropTemplate')
+	local swapFrame = CreateFrame("Frame")
 	local otherBags = {}
 	local locked = {}
 	local timeout = 0
@@ -452,8 +451,7 @@ end
 --------------------------------------------------------------------------------
 
 function addon:CreateBagSlotPanel(container, name, bags, isBank)
-	-- Added 'BackDropTemplate' in every create frame due to api change 9.0
-	local self = CreateFrame("Frame", container:GetName().."Bags", container, 'BackDropTemplate')
+	local self = CreateFrame("Frame", container:GetName().."Bags", container, "BackdropTemplate")
 	if ElvUI then
 		self:SetPoint("BOTTOMLEFT", container, "TOPLEFT", 0, 4)
 	elseif KlixUI then

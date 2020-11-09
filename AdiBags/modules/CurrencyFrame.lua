@@ -27,10 +27,10 @@ local _G = _G
 local BreakUpLargeNumbers = _G.BreakUpLargeNumbers
 local CreateFont = _G.CreateFont
 local CreateFrame = _G.CreateFrame
-local ExpandCurrencyList = C_CurrencyInfo.ExpandCurrencyList
+local ExpandCurrencyList = _G.C_CurrencyInfo.ExpandCurrencyList
 local format = _G.format
-local GetCurrencyListInfo = C_CurrencyInfo.GetCurrencyListInfo
-local GetCurrencyListSize = C_CurrencyInfo.GetCurrencyListSize
+local GetCurrencyListInfo = _G.C_CurrencyInfo.GetCurrencyListInfo
+local GetCurrencyListSize = _G.C_CurrencyInfo.GetCurrencyListSize
 local hooksecurefunc = _G.hooksecurefunc
 local ipairs = _G.ipairs
 local IsAddOnLoaded = _G.IsAddOnLoaded
@@ -99,8 +99,7 @@ function mod:OnBagFrameCreated(bag)
 	if bag.bagName ~= "Backpack" then return end
 	local frame = bag:GetFrame()
 
-	-- Added 'BackDropTemplate' in every create frame due to api change 9.0
-	local widget = CreateFrame("Button", addonName.."CurrencyFrame", frame, 'BackDropTemplate')
+	local widget = CreateFrame("Button", addonName.."CurrencyFrame", frame)
 	self.widget = widget
 	widget:SetHeight(16)
 	widget:RegisterForClicks("RightButtonUp")
@@ -119,27 +118,25 @@ end
 local IterateCurrencies
 do
 	local function iterator(collapse, index)
-		local CurrencyListSize = GetCurrencyListSize()
-		if CurrencyListSize == 0 then return end
-		CurrencyListSize = CurrencyListSize - 2
 		if not index then return end
 		repeat
 			index = index + 1
-			-- debbugging currency due to blizzard changing the GetCurrency function return
-			CurrencyListInfo = GetCurrencyListInfo(index)
-			if CurrencyListInfo.name then
-				if CurrencyListInfo.isHeader then
-					if not CurrencyListInfo.isHeaderExpanded then
-						tinsert(collapse, 1, index)
-						ExpandCurrencyList(index, 1)
+			local currencyListInfo = GetCurrencyListInfo(index)
+			if currencyListInfo then
+				if currencyListInfo.name then
+					if currencyListInfo.isHeader then
+						if not currencyListInfo.isHeaderExpanded then
+							tinsert(collapse, 1, index)
+							ExpandCurrencyList(index, true)
+						end
+					else
+						return index, currencyListInfo
 					end
-				else
-					return index, CurrencyListInfo
 				end
 			end
-		until index >= CurrencyListSize
+		until index > GetCurrencyListSize()
 		for i, index in ipairs(collapse) do
-			ExpandCurrencyList(index, 0)
+			ExpandCurrencyList(index, false)
 		end
 	end
 
@@ -159,16 +156,10 @@ function mod:Update()
 	updating = true
 
 	local shown, hideZeroes = self.db.profile.shown, self.db.profile.hideZeroes
-	-- Dirty avoid dooblons when showing isShowInBackpack money
-	for i, CurrencyInfo in IterateCurrencies() do
-		if CurrencyInfo.isShowInBackpack and (CurrencyInfo.quantity > 0 or not hideZeroes) then
-			tinsert(values, BreakUpLargeNumbers(CurrencyInfo.quantity))
-			tinsert(values, format(ICON_STRING, CurrencyInfo.iconFileID))
-			CurrencyInfo.CurrencyShown = true
-		end
-		if shown[CurrencyInfo.name] and (CurrencyInfo.quantity > 0 or not hideZeroes) and not CurrencyInfo.CurrencyShown then
-			tinsert(values, BreakUpLargeNumbers(CurrencyInfo.quantity))
-			tinsert(values, format(ICON_STRING, CurrencyInfo.iconFileID))
+	for i, currencyListInfo in IterateCurrencies() do
+		if shown[currencyListInfo.name] and (currencyListInfo.quantity > 0 or not hideZeroes) then
+			tinsert(values, BreakUpLargeNumbers(currencyListInfo.quantity))
+			tinsert(values, format(ICON_STRING, currencyListInfo.iconFileID))
 		end
 	end
 
@@ -188,8 +179,6 @@ function mod:Update()
 	updating = false
 end
 
-
--- TODO: Use the flag isShowInBackpack from C_CurrencyInfo.GetCurrencyInfo to configure curency
 function mod:GetOptions()
 	local values = {}
 	return {
@@ -199,8 +188,8 @@ function mod:GetOptions()
 			order = 10,
 			values = function()
 				wipe(values)
-				for i, CurrencyInfo in IterateCurrencies() do
-					values[CurrencyInfo.name] = format(ICON_STRING, CurrencyInfo.iconFileID)..CurrencyInfo.name
+				for i, currencyListInfo in IterateCurrencies() do
+					values[currencyListInfo.name] = format(ICON_STRING, currencyListInfo.iconFileID)..currencyListInfo.name
 				end
 				return values
 			end,
@@ -215,4 +204,3 @@ function mod:GetOptions()
 		text = addon:CreateFontOptions(self.font, nil, 30)
 	}, addon:GetOptionHandler(self, false, function() return self:Update() end)
 end
-
