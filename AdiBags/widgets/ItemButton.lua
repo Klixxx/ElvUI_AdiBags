@@ -35,7 +35,6 @@ local GetContainerItemInfo = _G.GetContainerItemInfo
 local GetContainerItemLink = _G.GetContainerItemLink
 local GetContainerItemQuestInfo = _G.GetContainerItemQuestInfo
 local GetContainerNumFreeSlots = _G.GetContainerNumFreeSlots
-local GetContainerNumFreeSlots = _G.GetContainerNumFreeSlots
 local GetItemInfo = _G.GetItemInfo
 local hooksecurefunc = _G.hooksecurefunc
 local IsBattlePayItem = _G.IsBattlePayItem
