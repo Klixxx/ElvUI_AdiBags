@@ -52,6 +52,7 @@ end
 local function Class_Create(class, ...)
 	class.serial = class.serial + 1
 	local self = CreateFrame(class.frameType, addonName..class.name..class.serial, defaultParent, class.frameTemplate)
+	Mixin(self, BackdropTemplateMixin)
 	self.GetItemContextMatchResult = nil -- We're not using the ContainerFrameItemButtonMixin
 	self:SetParent(nil) -- Get rid of the parent once the OnLoad handler has been called
 	setmetatable(self, class.metatable)
