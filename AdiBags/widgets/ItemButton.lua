@@ -40,8 +40,8 @@ local hooksecurefunc = _G.hooksecurefunc
 local IsBattlePayItem = _G.IsBattlePayItem
 --local IsContainerItemAnUpgrade = _G.IsContainerItemAnUpgrade
 local IsInventoryItemLocked = _G.IsInventoryItemLocked
-local LE_ITEM_QUALITY_POOR = _G.LE_ITEM_QUALITY_POOR
-local LE_ITEM_QUALITY_COMMON = _G.LE_ITEM_QUALITY_COMMON
+local ITEM_QUALITY_COMMON = _G.Enum.ItemQuality.Common
+local ITEM_QUALITY_POOR = _G.Enum.ItemQuality.Poor
 local next = _G.next
 local pairs = _G.pairs
 local REAGENTBANK_CONTAINER = _G.REAGENTBANK_CONTAINER
@@ -498,11 +498,11 @@ local function GetBorder(bag, slot, settings)
 		return
 	end
 	local _, _, _, quality = GetContainerItemInfo(bag, slot)
-	if quality == LE_ITEM_QUALITY_POOR and settings.dimJunk then
+	if quality == ITEM_QUALITY_POOR and settings.dimJunk then
 		local v = 1 - 0.5 * settings.qualityOpacity
 		return true, v, v, v, 1, "MOD"
 	end
-	local color = settings.allHighlight and BAG_ITEM_QUALITY_COLORS[quality] or quality ~= LE_ITEM_QUALITY_COMMON and BAG_ITEM_QUALITY_COLORS[quality]
+	local color = settings.allHighlight and BAG_ITEM_QUALITY_COLORS[quality] or quality ~= ITEM_QUALITY_COMMON and BAG_ITEM_QUALITY_COLORS[quality]
 	if color then
 		return [[Interface\Buttons\UI-ActionButton-Border]], color.r, color.g, color.b, settings.qualityOpacity, "ADD"
 	end
@@ -541,7 +541,7 @@ function buttonProto:UpdateBorder(isolatedEvent)
 	
 	if self.JunkIcon then
 		local quality = self.hasItem and select(3, GetItemInfo(self.itemLink or self.itemId))
-		self.JunkIcon:SetShown(quality == LE_ITEM_QUALITY_POOR and addon:GetInteractingWindow() == "MERCHANT")
+		self.JunkIcon:SetShown(quality == ITEM_QUALITY_POOR and addon:GetInteractingWindow() == "MERCHANT")
 	end
 	if isolatedEvent then
 		addon:SendMessage('AdiBags_UpdateBorder', self)
