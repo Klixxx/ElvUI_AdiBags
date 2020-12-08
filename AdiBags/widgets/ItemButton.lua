@@ -444,7 +444,13 @@ function buttonProto:UpdateNew()
 end
 
 function buttonProto:UpdateUpgradeIcon()
-	self.UpgradeIcon:SetShown(IsContainerItemAnUpgrade(self.bag, self.slot) or false)
+	local itemIsUpgrade
+	if _G.PawnIsContainerItemAnUpgrade then
+		itemIsUpgrade = _G.PawnIsContainerItemAnUpgrade(self.bag, self.slot)
+	else
+		itemIsUpgrade = _G.IsContainerItemAnUpgrade(self.bag, self.slot)
+	end
+	self.UpgradeIcon:SetShown(itemIsUpgrade or false)
 end
 
 function buttonProto:UpdateScrapIcon()
