@@ -563,6 +563,9 @@ function buttonProto:UpdateOverlay(isolatedEvent)
 			self.IconOverlay:Show()
 		else
 			self.IconOverlay:Hide()
+			if self.IconOverlay2 then
+				self.IconOverlay2:Hide()
+			end
 		end
 	end
 	if isolatedEvent then
