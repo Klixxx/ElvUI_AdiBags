@@ -26,6 +26,8 @@ local _G = _G
 local BAG_ITEM_QUALITY_COLORS = _G.BAG_ITEM_QUALITY_COLORS
 local BankButtonIDToInvSlotID = _G.BankButtonIDToInvSlotID
 local BANK_CONTAINER = _G.BANK_CONTAINER
+local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = _G.C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
+local C_Soulbinds_IsItemConduitByItemInfo = _G.C_Soulbinds.IsItemConduitByItemInfo
 local C_Item_CanScrapItem = _G.C_Item.CanScrapItem
 local C_Item_DoesItemExist = _G.C_Item.DoesItemExist
 local ContainerFrame_UpdateCooldown = _G.ContainerFrame_UpdateCooldown
@@ -38,7 +40,8 @@ local GetContainerNumFreeSlots = _G.GetContainerNumFreeSlots
 local GetItemInfo = _G.GetItemInfo
 local hooksecurefunc = _G.hooksecurefunc
 local IsBattlePayItem = _G.IsBattlePayItem
---local IsContainerItemAnUpgrade = _G.IsContainerItemAnUpgrade
+local IsCorruptedItem = _G.IsCorruptedItem
+local IsCosmeticItem = _G.IsCosmeticItem
 local IsInventoryItemLocked = _G.IsInventoryItemLocked
 local ITEM_QUALITY_COMMON = _G.Enum.ItemQuality.Common
 local ITEM_QUALITY_POOR = _G.Enum.ItemQuality.Poor
@@ -85,6 +88,10 @@ function buttonProto:OnCreate()
 	if ElvUI then
 		self:SetTemplate(nil, true)
 		self:StyleButton()
+		self.IconOverlay:SetInside()
+		if self.IconOverlay2 then
+			self.IconOverlay2:SetInside()
+		end
 	elseif KlixUI then
 		self:SetTemplate("Transparent")
 		self:StyleButton(1)
@@ -97,21 +104,6 @@ function buttonProto:OnCreate()
 		scrapIcon:SetPoint("TOPRIGHT", -2, -2)
 		scrapIcon:Hide()
 		self.ScrapIcon = scrapIcon
-	end
-	if not self.Azerite then
-		local azerite = self:CreateTexture(nil, "ARTWORK")
-		azerite:SetAtlas("AzeriteIconFrame")
-		azerite:SetTexCoord(0, 1, 0, 1)
-		azerite:SetInside()
-		azerite:Hide()
-		self.Azerite = azerite
-	end
-	if not self.Corruption then
-		local corruption = self:CreateTexture(nil, "ARTWORK")
-		corruption:SetAtlas("Nzoth-inventory-icon")
-		corruption:SetInside()
-		corruption:Hide()
-		self.Corruption = corruption
 	end
 	if not self.QuestIcon then
 		local questIcon = self:CreateFontString(nil, "OVERLAY")
@@ -373,8 +365,7 @@ function buttonProto:Update()
 	self:UpdateNew()
 	self:UpdateUpgradeIcon()
 	self:UpdateScrapIcon()
-	self:UpdateAzerite()
-	self:UpdateCorruption()
+	self:UpdateOverlay()
 	--self:UpdateQuestIcon()
 	self:UpdateKlixStyling()
 	if self.UpdateSearch then
@@ -460,20 +451,6 @@ function buttonProto:UpdateScrapIcon()
 	end	
 end
 
-function buttonProto:UpdateAzerite()
-	local link = GetContainerItemLink(self.bag, self.slot)
-	if link then
-		self.Azerite:SetShown(C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(link))
-	else
-		self.Azerite:Hide()
-	end
-end
-
-function buttonProto:UpdateCorruption()
-	local link = GetContainerItemLink(self.bag, self.slot)
-	self.Corruption:SetShown(link and IsCorruptedItem(link))
-end
-
 function buttonProto:UpdateQuestIcon()
 	local isQuestItem, questId, isActive = GetContainerItemQuestInfo(self.bag, self.slot)
 	if questId and not isActive then
@@ -551,6 +528,45 @@ function buttonProto:UpdateBorder(isolatedEvent)
 	end
 	if isolatedEvent then
 		addon:SendMessage('AdiBags_UpdateBorder', self)
+	end
+end
+
+function buttonProto:UpdateOverlay(isolatedEvent)
+	if self.hasItem then
+		local atlasName
+		local itemIDOrLink = self.itemId or self.itemLink
+		local _, _, _, quality, _, _, _, _, _, _, isBound = GetContainerItemInfo(self.bag, self.slot)
+
+		if C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(itemIDOrLink) then
+			atlasName = "AzeriteIconFrame"
+		elseif IsCorruptedItem(itemIDOrLink) then
+			atlasName = "Nzoth-inventory-icon"
+		elseif IsCosmeticItem(itemIDOrLink) and not isBound then
+			atlasName = "CosmeticIconFrame"
+		elseif C_Soulbinds_IsItemConduitByItemInfo(itemIDOrLink) then
+			atlasName = "ConduitIconFrame"
+		end
+
+		if atlasName then
+			if atlasName == "ConduitIconFrame" then
+				if not quality or not BAG_ITEM_QUALITY_COLORS[quality] then
+					quality = ITEM_QUALITY_COMMON
+				end
+				local color = BAG_ITEM_QUALITY_COLORS[quality]
+				self.IconOverlay:SetVertexColor(color.r, color.g, color.b)
+				if self.IconOverlay2 then
+					self.IconOverlay2:SetAtlas("ConduitIconFrame-Corners")
+					self.IconOverlay2:Show()
+				end
+			end
+			self.IconOverlay:SetAtlas(atlasName)
+			self.IconOverlay:Show()
+		else
+			self.IconOverlay:Hide()
+		end
+	end
+	if isolatedEvent then
+		addon:SendMessage("AdiBags_UpdateOverlay", self)
 	end
 end
 
