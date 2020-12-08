@@ -531,7 +531,7 @@ function buttonProto:UpdateBorder(isolatedEvent)
 	end
 end
 
-function buttonProto:UpdateOverlay(isolatedEvent)
+function buttonProto:UpdateOverlay()
 	if self.hasItem then
 		local atlasName
 		local itemIDOrLink = self.itemId or self.itemLink
@@ -567,9 +567,6 @@ function buttonProto:UpdateOverlay(isolatedEvent)
 				self.IconOverlay2:Hide()
 			end
 		end
-	end
-	if isolatedEvent then
-		addon:SendMessage("AdiBags_UpdateOverlay", self)
 	end
 end
 
