@@ -20,6 +20,7 @@ along with AdiBags.  If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local _, addon = ...
+local LCG = LibStub('LibCustomGlow-1.0')
 
 --<GLOBALS
 local _G = _G
@@ -367,6 +368,7 @@ function buttonProto:Update()
 	self:UpdateScrapIcon()
 	self:UpdateOverlay()
 	--self:UpdateQuestIcon()
+	self:UpdateConduitGlow()
 	self:UpdateKlixStyling()
 	if self.UpdateSearch then
 		self:UpdateSearch()
@@ -458,6 +460,45 @@ function buttonProto:UpdateQuestIcon()
 	else
 		self.QuestIcon:SetAlpha(0)
 	end
+end
+
+-- Glows
+--------------------------------------------------------------------------------
+-- Pixel glow
+--------------------------------------------------------------------------------
+local function ShowPixelGlow(self, enable)
+	if enable then
+		LCG.PixelGlow_Start(self, addon.db.profile.conduitGlowColor, nil, -0.25, nil, 2, 1, 0)
+	else
+		LCG.PixelGlow_Stop(self)
+	end
+end
+
+--------------------------------------------------------------------------------
+-- Particle glow
+--------------------------------------------------------------------------------
+local function ShowParticleGlow(self, enable)
+	if enable then
+		LCG.AutoCastGlow_Start(self, addon.db.profile.conduitGlowColor, 6, -0.25, 1.5)
+	else
+		LCG.AutoCastGlow_Stop(self)
+	end
+end
+
+function buttonProto:UpdateConduitGlow()
+	local enabled = addon.db.profile.conduitHighlight ~= "none"
+	local isBankButton = BANK_BAG_IDS[self.bag]
+	local soulbindFrameShown = SoulbindViewer and SoulbindViewer:IsShown() and SoulbindViewer:IsVisible()
+	if (not enabled) or (isBankButton) or (not soulbindFrameShown) then return end
+
+	local itemLoc = ItemLocation:CreateFromBagAndSlot(self.bag, self.slot)
+	if (not itemLoc:IsValid()) then return end
+	
+	local isConduit = C_Item.IsItemConduit(itemLoc)
+
+	-- only pixel / particle supported
+	ShowPixelGlow(self, isConduit and addon.db.profile.conduitHighlight == "pixel")
+	ShowParticleGlow(self, isConduit and addon.db.profile.conduitHighlight == "particle")
 end
 
 function buttonProto:UpdateKlixStyling()
