@@ -656,7 +656,7 @@ function containerProto:UpdateSkin()
 		self:Styling()
 	end
 	if ElvUI_BenikUI then
-		self:Style("Inside")
+		self:BuiStyle("Inside")
 	end
 end
 

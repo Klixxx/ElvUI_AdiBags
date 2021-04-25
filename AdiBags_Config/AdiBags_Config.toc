@@ -3,7 +3,7 @@
 ## Title: AdiBags Configuration
 ## Notes: Adirelle's bag addon. (For |cfffe7b2cElvUI|r by |cfff960d9Klix|r-Twisiting Nether)
 ## Author: Adirelle, Klix
-## Version: v1.9.17 build 0.16
+## Version: Build 17
 ## X-Date: 2019-07-09T18:22:10Z
 ## X-Part-Of: AdiBags
 ## LoadOnDemand: 1
