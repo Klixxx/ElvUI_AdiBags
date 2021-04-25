@@ -594,34 +594,6 @@ local function GetOptions()
 						type = 'toggle',
 						order = 240,
 					},
-					ConduitGlow = {
-						name = L['Conduit Highlight'],
-						type = 'group',
-						inline = true,
-						order = 250,
-						args = {
-							conduitHighlight = {
-								name = "Highlight style",
-								type = 'select',
-								order = 10,
-								width = 'double',
-								values = {
-									none = "None",
-									pixel = "Pixel",
-									particle = "Particle"
-								}
-							},
-							conduitGlowColor = {
-								name = "Highlight color",
-								type = 'color',
-								order = 20,
-								hasAlpha = true,
-								disabled = function()
-									return addon.db.profile.highlight == "none"
-								end,
-							},
-						},
-					},
 					virtualStacks = {
 						name = L['Virtual stacks'],
 						type = 'group',

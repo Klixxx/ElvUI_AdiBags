@@ -136,8 +136,6 @@ addon.DEFAULT_SETTINGS = {
 		dimJunk = true,
 		questIndicator = true,
 		scrapIndicator = true,
-		conduitHighlight = "pixel",
-		conduitGlowColor = { 1, 1, 0.0, 0.7 },
 		showBagType = true,
 		filters = { ['*'] = true },
 		filterPriorities = {},
