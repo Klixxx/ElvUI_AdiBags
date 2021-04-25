@@ -274,7 +274,7 @@ local function GetOptions()
 		name = addonName..' DEV',
 		--@end-debug@]===]
 		--@non-debug@
-		name = addonName..' Build 17',
+		name = "ElvUI "..addonName..' Build 17',
 		--@end-non-debug@
 		type = 'group',
 		handler = addon:GetOptionHandler(addon),
