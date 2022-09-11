@@ -1,12 +1,18 @@
-tag 0c0ca7755596ec9b4f6d39ed0e15a65129604c93 v1.9.17
-Author:	Talyrius <contact@talyrius.net>
-Date:	Tue Jul 9 11:24:31 2019 -0700
+lightweight tag 8ec7eb99ea9adcd894023cd636c6eff2bf13de80 v1.9.37
+Author:	GitHub <noreply@github.com>
+Date:	Fri Sep 2 12:30:28 2022 -0700
 
-Tagging as v1.9.17.
+commit 8ec7eb99ea9adcd894023cd636c6eff2bf13de80
+Author: Antonio Lobato <aj.lobato@gmail.com>
+Date:   Fri Sep 2 12:30:28 2022 -0700
 
-commit b2f75413d47b21a53ea6fa2e0995760a1b0803af
-Author: Talyrius <contact@talyrius.net>
-Date:   Tue Jul 9 11:22:10 2019 -0700
+    Fixed wrath addon detection. (#683)
 
-    ItemLevel: Updated item level ranges for Season 3.
+commit d20a85b2c867d732c6ea10b19b4ab3bc59f6d64f
+Author: Antonio Lobato <aj.lobato@gmail.com>
+Date:   Thu Sep 1 11:22:34 2022 -0700
+
+    Section layout dupe (#681)
+    
+    * Fixed duplicate sections causing SetPoint errors at times.
 

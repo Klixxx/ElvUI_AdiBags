@@ -1,6 +1,6 @@
 --[[
 AdiBags - Adirelle's bag addon.
-Copyright 2010-2014 Adirelle (adirelle@gmail.com)
+Copyright 2010-2021 Adirelle (adirelle@gmail.com)
 All rights reserved.
 
 This file is part of AdiBags.
@@ -52,7 +52,6 @@ end
 local function Class_Create(class, ...)
 	class.serial = class.serial + 1
 	local self = CreateFrame(class.frameType, addonName..class.name..class.serial, defaultParent, class.frameTemplate)
-	Mixin(self, BackdropTemplateMixin)
 	self.GetItemContextMatchResult = nil -- We're not using the ContainerFrameItemButtonMixin
 	self:SetParent(nil) -- Get rid of the parent once the OnLoad handler has been called
 	setmetatable(self, class.metatable)

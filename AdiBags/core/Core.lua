@@ -1,6 +1,6 @@
 --[[
 AdiBags - Adirelle's bag addon.
-Copyright 2010-2014 Adirelle (adirelle@gmail.com)
+Copyright 2010-2021 Adirelle (adirelle@gmail.com)
 All rights reserved.
 
 This file is part of AdiBags.
@@ -108,7 +108,14 @@ function addon:OnInitialize()
 	self:RegisterChatCommand("adibags", function(cmd)
 		addon:OpenOptions(strsplit(' ', cmd or ""))
 	end, true)
-	
+
+	-- Just a warning
+	--[===[@alpha@
+	if geterrorhandler() == _G._ERRORMESSAGE and not GetCVarBool("scriptErrors") then
+		print('|cffffee00', L["Warning: You are using an alpha or beta version of AdiBags without displaying Lua errors. If anything goes wrong, AdiBags (or any other addon causing some error) will simply stop working for apparently no reason. Please either enable the display of Lua errors or install an error handler addon like BugSack or Swatter."], '|r')
+	end
+	--@end-alpha@]===]
+
 	self:Debug('Initialized')
 end
 
@@ -119,7 +126,9 @@ function addon:OnEnable()
 	self:RegisterEvent('BAG_UPDATE')
 	self:RegisterEvent('BAG_UPDATE_DELAYED')
 	self:RegisterBucketEvent('PLAYERBANKSLOTS_CHANGED', 0.01, 'BankUpdated')
-	self:RegisterBucketEvent('PLAYERREAGENTBANKSLOTS_CHANGED', 0.01, 'ReagentBankUpdated')
+	if addon.isRetail then
+		self:RegisterBucketEvent('PLAYERREAGENTBANKSLOTS_CHANGED', 0.01, 'ReagentBankUpdated')
+	end
 
 	self:RegisterEvent('PLAYER_LEAVING_WORLD', 'Disable')
 
@@ -154,10 +163,6 @@ function addon:OnEnable()
 	self:RegisterEvent('VOID_STORAGE_CLOSE', 'UpdateInteractingWindow')
 	self:RegisterEvent('SOCKET_INFO_UPDATE', 'UpdateInteractingWindow')
 	self:RegisterEvent('SOCKET_INFO_CLOSE', 'UpdateInteractingWindow')
-	self:RegisterEvent('OBLITERUM_FORGE_SHOW', 'UpdateInteractingWindow')
-	self:RegisterEvent('OBLITERUM_FORGE_CLOSE', 'UpdateInteractingWindow')
-	self:RegisterEvent('SCRAPPING_MACHINE_SHOW', 'UpdateInteractingWindow')
-	self:RegisterEvent('SCRAPPING_MACHINE_CLOSE', 'UpdateInteractingWindow')
 
 	self:SetSortingOrder(self.db.profile.sortingOrder)
 
@@ -260,27 +265,6 @@ function addon:UpgradeProfile()
 end
 
 --------------------------------------------------------------------------------
--- Error reporting
---------------------------------------------------------------------------------
-
-local BugGrabber = addon.BugGrabber
-if BugGrabber then
-	if BugGrabber.setupCallbacks then
-		BugGrabber.setupCallbacks()
-	end
-	local pattern = "("..addonName.."[^\n]+%.lua):%d+:"
-	BugGrabber.RegisterCallback(addon, 'BugGrabber_BugGrabbed', function(_, errorObject)
-		local ref = errorObject and errorObject.stack and strmatch(errorObject.stack, pattern)
-		if ref and not strmatch(ref, '\\libs\\') then
-			if not addon.db.global.muteBugGrabber then
-				print(format('|cffffff00'..L['Error in %s: %s -- details: %s'], addonName, '|r'..errorObject.message, BugGrabber:GetChatLink(errorObject)))
-			end
-			addon:Debug('Error:', errorObject.message)
-		end
-	end)
-end
-
---------------------------------------------------------------------------------
 -- Option addon handling
 --------------------------------------------------------------------------------
 
@@ -312,30 +296,11 @@ do
 	fs:SetJustifyH("LEFT")
 	fs:SetJustifyV("TOP")
 	fs:SetText(addonName)
-	
-	local br1 = panel:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-	br1:SetPoint("TOPLEFT", 10, -35)
-	br1:SetPoint("BOTTOMRIGHT", panel, "TOPRIGHT", 10, -45)
-	br1:SetJustifyH("LEFT")
-	br1:SetJustifyV("TOP")
-	br1:SetText(L["BUG_REPORT1"])
-	
-	local br2 = panel:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-	br2:SetPoint("TOPLEFT", 10, -57)
-	br2:SetPoint("BOTTOMRIGHT", panel, "TOPRIGHT", 10, -45)
-	br2:SetJustifyH("LEFT")
-	br2:SetJustifyV("TOP")
-	br2:SetText(L["BUG_REPORT2"])
-	
+
 	local button = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
 	button:SetText(L['Configure'])
 	button:SetWidth(128)
-	button:SetPoint("TOPLEFT", 10, -68)
-	if ElvUI then
-		ElvUI[1]:GetModule("Skins"):HandleButton(button) -- ElvUI Mod!
-	elseif KlixUI then
-		KlixUI[1]:GetModule("Skins"):Reskin(button)
-	end
+	button:SetPoint("TOPLEFT", 10, -48)
 	button:SetScript('OnClick', function()
 		while CloseWindows() do end
 		return addon:OpenOptions()
@@ -362,7 +327,10 @@ addon:SetDefaultModulePrototype(moduleProto)
 
 local updatedBags = {}
 local updatedBank = { [BANK_CONTAINER] = true }
-local updatedReagentBank = { [REAGENTBANK_CONTAINER] = true }
+local updatedReagentBank = {}
+if addon.isRetail then
+	updatedReagentBank = { [REAGENTBANK_CONTAINER] = true }
+end
 
 function addon:BAG_UPDATE(event, bag)
 	updatedBags[bag] = true

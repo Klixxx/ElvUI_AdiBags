@@ -1,6 +1,6 @@
 --[[
 AdiBags - Adirelle's bag addon.
-Copyright 2013-2014 Adirelle (adirelle@gmail.com)
+Copyright 2013-2021 Adirelle (adirelle@gmail.com)
 All rights reserved.
 
 This file is part of AdiBags.
@@ -26,8 +26,17 @@ local L = addon.L
 local _G = _G
 local abs = _G.math.abs
 local GetItemInfo = _G.GetItemInfo
-local ITEM_QUALITY_HEIRLOOM = _G.Enum.ItemQuality.Heirloom
-local ITEM_QUALITY_POOR = _G.Enum.ItemQuality.Poor
+local ITEM_QUALITY_HEIRLOOM
+local ITEM_QUALITY_POOR
+
+if addon.isRetail then
+	ITEM_QUALITY_HEIRLOOM = _G.Enum.ItemQuality.Heirloom
+	ITEM_QUALITY_POOR = _G.Enum.ItemQuality.Poor
+else
+	ITEM_QUALITY_HEIRLOOM = _G.LE_ITEM_QUALITY_HEIRLOOM
+	ITEM_QUALITY_POOR = _G.LE_ITEM_QUALITY_POOR
+end
+
 local QuestDifficultyColors = _G.QuestDifficultyColors
 local UnitLevel = _G.UnitLevel
 local modf = _G.math.modf
@@ -37,7 +46,10 @@ local pairs = _G.pairs
 local select = _G.select
 local unpack = _G.unpack
 local wipe = _G.wipe
-local ExtractLink = _G.LinkUtil.ExtractLink
+local ExtractLink
+if addon.isRetail then
+	ExtractLink = _G.LinkUtil.ExtractLink
+end
 --GLOBALS>
 
 local mod = addon:NewModule('ItemLevel', 'ABEvent-1.0')
@@ -69,7 +81,6 @@ function mod:OnInitialize()
 			ignoreJunk = true,
 			ignoreHeirloom = true,
 			showBattlePetLevels = true,
-			position = "bottom",
 		},
 	})
 	if self.db.profile.colored == true then
@@ -109,12 +120,21 @@ end
 
 local function CreateText(button)
 	local text = button:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
+	text:SetPoint("TOPLEFT", button, 3, -1)
 	text:Hide()
 	texts[button] = text
 	return text
 end
 
 function mod:UpdateButton(event, button)
+	if addon.isRetail then
+		mod:UpdateButton_Retail(event, button)
+	else
+		mod:UpdateButton_Classic(event, button)
+	end
+end
+
+function mod:UpdateButton_Retail(event, button)
 	local settings = self.db.profile
 	local text = texts[button]
 	local link = button:GetItemLink()
@@ -142,9 +162,9 @@ function mod:UpdateButton(event, button)
 			local item = Item:CreateFromBagAndSlot(button.bag, button.slot)
 			level = item and item:GetCurrentItemLevel() or 0
 			if level >= settings.minLevel
-							and (quality ~= ITEM_QUALITY_POOR or not settings.ignoreJunk)
-							and (loc ~= "" or not settings.equippableOnly)
-							and (quality ~= ITEM_QUALITY_HEIRLOOM or not settings.ignoreHeirloom)
+				and (quality ~= ITEM_QUALITY_POOR or not settings.ignoreJunk)
+				and (loc ~= "" or not settings.equippableOnly)
+				and (quality ~= ITEM_QUALITY_HEIRLOOM or not settings.ignoreHeirloom)
 			then
 				color = {colorSchemes[settings.colorScheme](level, quality, reqLevel, (loc ~= ""))}
 				shouldShow = true
@@ -161,11 +181,6 @@ function mod:UpdateButton(event, button)
 	if shouldShow then
 		if not text then
 			text = CreateText(button)
-			if settings.position == "top" then
-				text:SetPoint("TOPLEFT", button, 3, -1)
-			else
-				text:SetPoint("BOTTOMRIGHT", button, -1, 3)
-			end
 		end
 		if level then
 			text:SetText(level)
@@ -184,6 +199,46 @@ function mod:UpdateButton(event, button)
 		if text then text:Hide() end
 	end
 	updateCache[button] = link
+end
+
+function mod:UpdateButton_Classic(event, button)
+	local settings = self.db.profile
+	local link = button:GetItemLink()
+	local text = texts[button]
+
+	if link then
+		local _, _, quality, _, reqLevel, _, _, _, loc = GetItemInfo(link)
+		local item = Item:CreateFromBagAndSlot(button.bag, button.slot)
+		local level = item and item:GetCurrentItemLevel() or 0
+		if level >= settings.minLevel
+			and (quality ~= LE_ITEM_QUALITY_POOR or not settings.ignoreJunk)
+			and (loc ~= "" or not settings.equippableOnly)
+		then
+			if SyLevel then
+				if settings.useSyLevel then
+					if text then
+						text:Hide()
+					end
+					SyLevel:CallFilters('Adibags', button, link)
+					return
+				else
+					SyLevel:CallFilters('Adibags', button, nil)
+				end
+			end
+			if not text then
+				text = CreateText(button)
+			end
+			text:SetText(level)
+			text:SetTextColor(colorSchemes[settings.colorScheme](level, quality, reqLevel, (loc ~= "")))
+			return text:Show()
+		end
+	end
+	if SyLevel then
+		SyLevel:CallFilters('Adibags', button, nil)
+	end
+	if text then
+		text:Hide()
+	end
 end
 
 local function SetOptionAndUpdate(info, value)
@@ -219,7 +274,6 @@ function mod:GetOptions()
 				none     = L['None'],
 				original = L['Same as InventoryItemLevels'],
 				level    = L['Related to player level'],
-				qualityColor = L['Same as quality colour'],
 			},
 			order = 20,
 			set = SetOptionAndUpdate,
@@ -255,16 +309,6 @@ function mod:GetOptions()
 			type = 'toggle',
 			order = 60,
 			set = SetOptionAndUpdate,
-		},
-		position = {
-			name = L['Itemlevel position'],
-			desc = L['Please do a /rl after changing the itemlevel position.'],
-			type = 'select',
-			order = 70,
-			values = {
-				top = L["Top"],
-				bottom = L["Bottom"],
-			},
 		},
 	}, addon:GetOptionHandler(self)
 end
@@ -425,15 +469,6 @@ do
 		else
 			-- Would this happen ?
 			return 1, 1, 1
-		end
-	end
-	-- Color scheme for quality colors
-	do
-		colorSchemes.qualityColor = function(level, quality)
-			r, g, b, hex = GetItemQualityColor(quality)
-			return r,g,b
-
-
 		end
 	end
 end
