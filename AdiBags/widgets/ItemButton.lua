@@ -461,13 +461,15 @@ function buttonProto:UpdateBorder(isolatedEvent)
 	else
 		local border = self.IconQuestTexture
 		if texture == true then
-			border:SetVertexColor(1, 1, 1, 1)
+			--border:SetVertexColor(1, 1, 1, 1)
 			border:SetColorTexture(r or 1, g or 1, b or 1, a or 1)
 		else
 			border:SetTexture(texture)
-			border:SetVertexColor(r or 1, g or 1, b or 1, a or 1)
+			--border:SetVertexColor(r or 1, g or 1, b or 1, a or 1)
+			self:SetBackdropBorderColor(r or 1, g or 1, b or 1, a or 1)
 		end
 		border:SetTexCoord(x1 or 0, x2 or 1, y1 or 0, y2 or 1)
+		border:SetInside()
 		border:SetBlendMode(blendMode or "BLEND")
 		border:Show()
 	end
