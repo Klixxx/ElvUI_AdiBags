@@ -456,19 +456,18 @@ function buttonProto:UpdateBorder(isolatedEvent)
 	if self.hasItem then
 		texture, r, g, b, a, x1, x2, y1, y2, blendMode = GetBorder(self.bag, self.slot, self.itemLink or self.itemId, addon.db.profile)
 	end
-	if not texture then
+	local border = self.IconQuestTexture
+	if not texture and texture ~= nil then
 		self.IconQuestTexture:Hide()
-	else
-		local border = self.IconQuestTexture
+		border:Hide()
+	else		
 		if texture == true then
-			--border:SetVertexColor(1, 1, 1, 1)
-			border:SetColorTexture(r or 1, g or 1, b or 1, a or 1)
+			border:SetColorTexture(r, g, b, a)
 		else
-			border:SetTexture(texture)
-			--border:SetVertexColor(r or 1, g or 1, b or 1, a or 1)
-			self:SetBackdropBorderColor(r or 1, g or 1, b or 1, a or 1)
+			border:SetTexture()
+			self:SetBackdropBorderColor(r, g, b, a)
 		end
-		border:SetTexCoord(x1 or 0, x2 or 1, y1 or 0, y2 or 1)
+		border:SetTexCoord(0, 1, 0, 1)
 		border:SetInside()
 		border:SetBlendMode(blendMode or "BLEND")
 		border:Show()
